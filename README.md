@@ -60,6 +60,27 @@ leer el código de barras de un producto físico:
 - Si no hay cámara disponible o el permiso es denegado, siempre queda la alternativa de
   ingresar el código a mano — el flujo nunca se bloquea por falta de cámara.
 
+## Qué es administrable sin tocar código
+
+Desde `/admin` (rol Administrador, salvo que se indique otro) se puede editar en caliente:
+
+- **Categorías** (`/admin/catalogo`) — crear, editar, reordenar, ocultar/mostrar y eliminar.
+  Ya no son una lista fija: viven en el store y se reflejan al instante en la tienda pública
+  (menú, catálogo, filtros). Si se elimina una categoría con productos, esos productos quedan
+  sin categoría asignada en vez de perderse.
+- **Marcas** (`/admin/catalogo`) — igual, CRUD completo.
+- **Contenido de la portada** (`/admin/contenido`) — título, subtítulo, textos de los botones
+  y de los beneficios del hero, con **vista previa en vivo** (el mismo componente que se
+  renderiza en la tienda, no una aproximación). "Restablecer al original" recupera el texto
+  con el que se lanzó el sitio.
+- Todo lo demás documentado en la tabla de roles más abajo (productos, inventario, pedidos,
+  pagos, caja, clientes, proveedores, usuarios, reportes, config de delivery/pagos).
+
+**Importante:** por ahora todo esto vive en el `localStorage` del navegador (ver "Backend
+simulado" abajo) — los cambios hechos en el panel no se sincronizan todavía entre
+dispositivos ni se reflejan para clientes reales en otro navegador. Para que sea así, el
+siguiente paso es conectar una base de datos real detrás de `dataStore.ts`.
+
 ## Notas de arquitectura
 
 - **Stack:** React 19 + TypeScript + Vite, Tailwind CSS v4, React Router, Zustand

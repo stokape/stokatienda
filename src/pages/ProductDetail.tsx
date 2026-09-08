@@ -2,8 +2,6 @@ import { ChevronRight, PackageX, ShieldCheck, ShoppingCart, Truck } from "lucide
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "react-router-dom";
-import { brands } from "../data/brands";
-import { categories } from "../data/categories";
 import { ProductCard } from "../components/store/ProductCard";
 import { ProductImage } from "../components/store/ProductImage";
 import { PriceTag } from "../components/store/PriceTag";
@@ -17,6 +15,8 @@ import { useDataStore } from "../store/dataStore";
 export function ProductDetail() {
   const { slug } = useParams();
   const products = useDataStore((s) => s.products);
+  const brands = useDataStore((s) => s.brands);
+  const categories = useDataStore((s) => s.categories);
   const product = products.find((p) => p.slug === slug);
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((s) => s.addItem);

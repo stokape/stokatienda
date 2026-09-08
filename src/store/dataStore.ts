@@ -2,11 +2,13 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { brands as seedBrands } from "../data/brands";
 import { cashSessions as seedCashSessions } from "../data/cash";
+import { categories as seedCategories } from "../data/categories";
 import { defaultStoreConfig } from "../data/config";
 import { customers as seedCustomers } from "../data/customers";
 import { inventoryMovements as seedMovements } from "../data/inventory";
 import { orders as seedOrders } from "../data/orders";
 import { products as seedProducts } from "../data/products";
+import { defaultSiteContent } from "../data/siteContent";
 import { purchases as seedPurchases, suppliers as seedSuppliers } from "../data/suppliers";
 import { staffUsers as seedUsers } from "../data/users";
 import { generateId, nextOrderCode } from "../lib/id";
@@ -14,6 +16,7 @@ import type {
   Brand,
   CashMovement,
   CashSession,
+  Category,
   Customer,
   InventoryMovement,
   Order,
@@ -21,14 +24,26 @@ import type {
   PaymentStatus,
   Product,
   Purchase,
+  SiteContent,
   StaffUser,
   StoreConfig,
   Supplier,
 } from "../types";
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 interface DataState {
   products: Product[];
   brands: Brand[];
+  categories: Category[];
+  siteContent: SiteContent;
   orders: Order[];
   inventoryMovements: InventoryMovement[];
   suppliers: Supplier[];
@@ -47,6 +62,15 @@ interface DataState {
   addBrand: (name: string) => void;
   updateBrand: (id: string, name: string) => void;
   deleteBrand: (id: string) => void;
+
+  // Categorías
+  addCategory: (c: Omit<Category, "slug" | "order">) => void;
+  updateCategory: (slug: string, patch: Partial<Category>) => void;
+  deleteCategory: (slug: string) => void;
+  reorderCategories: (orderedSlugs: string[]) => void;
+
+  // Contenido de la portada
+  updateSiteContent: (patch: Partial<SiteContent>) => void;
 
   // Pedidos
   createOrder: (order: Omit<Order, "id" | "code" | "history" | "createdAt" | "status"> & { status?: OrderStatus }) => Order;
@@ -87,6 +111,8 @@ export const useDataStore = create<DataState>()(
     (set, get) => ({
       products: seedProducts,
       brands: seedBrands,
+      categories: seedCategories,
+      siteContent: defaultSiteContent,
       orders: seedOrders,
       inventoryMovements: seedMovements,
       suppliers: seedSuppliers,
@@ -116,6 +142,34 @@ export const useDataStore = create<DataState>()(
         set((state) => ({ brands: state.brands.map((b) => (b.id === id ? { ...b, name } : b)) })),
       deleteBrand: (id) =>
         set((state) => ({ brands: state.brands.filter((b) => b.id !== id) })),
+
+      addCategory: (c) =>
+        set((state) => {
+          const baseSlug = slugify(c.name) || generateId("cat");
+          let slug = baseSlug;
+          let n = 2;
+          while (state.categories.some((cat) => cat.slug === slug)) {
+            slug = `${baseSlug}-${n++}`;
+          }
+          const order = state.categories.reduce((max, cat) => Math.max(max, cat.order), 0) + 1;
+          return { categories: [...state.categories, { ...c, slug, order }] };
+        }),
+      updateCategory: (slug, patch) =>
+        set((state) => ({
+          categories: state.categories.map((c) => (c.slug === slug ? { ...c, ...patch } : c)),
+        })),
+      deleteCategory: (slug) =>
+        set((state) => ({ categories: state.categories.filter((c) => c.slug !== slug) })),
+      reorderCategories: (orderedSlugs) =>
+        set((state) => ({
+          categories: state.categories.map((c) => {
+            const idx = orderedSlugs.indexOf(c.slug);
+            return idx === -1 ? c : { ...c, order: idx + 1 };
+          }),
+        })),
+
+      updateSiteContent: (patch) =>
+        set((state) => ({ siteContent: { ...state.siteContent, ...patch } })),
 
       createOrder: (orderInput) => {
         const state = get();

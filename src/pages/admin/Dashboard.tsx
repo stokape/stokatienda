@@ -2,7 +2,6 @@ import { AlertTriangle, Boxes, CalendarClock, ReceiptText, TrendingUp, Wallet } 
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
-import { categories } from "../../data/categories";
 import { StatCard } from "../../components/ui/StatCard";
 import { formatCurrency } from "../../lib/format";
 import { useDataStore } from "../../store/dataStore";
@@ -13,6 +12,7 @@ const CHART_COLORS = ["#0F4D3A", "#FF6B4A", "#F6B93B", "#2F6FED", "#2F8A63", "#E
 export function Dashboard() {
   const orders = useDataStore((s) => s.orders);
   const products = useDataStore((s) => s.products);
+  const categories = useDataStore((s) => s.categories);
 
   const stats = useMemo(() => {
     const today = new Date().toDateString();
@@ -69,7 +69,7 @@ export function Dashboard() {
       name: categories.find((c) => c.slug === cat)?.name ?? cat,
       value: Math.round(value * 100) / 100,
     }));
-  }, [orders, products]);
+  }, [orders, products, categories]);
 
   return (
     <div>

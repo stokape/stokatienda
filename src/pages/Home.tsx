@@ -1,6 +1,6 @@
 import { ArrowRight, Banknote, Landmark, ShieldCheck, Smartphone, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
-import { categories } from "../data/categories";
+import { visibleCategories } from "../lib/categories";
 import { Hero } from "../components/store/Hero";
 import { CategoryPill } from "../components/store/CategoryPill";
 import { ProductCard } from "../components/store/ProductCard";
@@ -8,6 +8,7 @@ import { useDataStore } from "../store/dataStore";
 
 export function Home() {
   const products = useDataStore((s) => s.products);
+  const categories = visibleCategories(useDataStore((s) => s.categories));
   const featured = products.filter((p) => p.featured).slice(0, 8);
   const offers = products.filter((p) => p.compareAtPrice).slice(0, 4);
 

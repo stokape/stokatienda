@@ -1,12 +1,14 @@
 import { Camera, Globe, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import { categories } from "../../data/categories";
+import { visibleCategories } from "../../lib/categories";
+import { useDataStore } from "../../store/dataStore";
 import { BrandMark } from "../ui/BrandMark";
 
 // El pie de página se mantiene siempre oscuro (fijo, no sigue el tema
 // claro/oscuro del sitio) a propósito: es un cierre de marca consistente,
 // como en la mayoría de tiendas con selector de tema.
 export function Footer() {
+  const categories = visibleCategories(useDataStore((s) => s.categories));
   return (
     <footer className="mt-16 border-t border-white/10 bg-stoka-black text-stoka-silver-light">
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-4">

@@ -1,7 +1,7 @@
 import { PackageSearch, Search, SlidersHorizontal, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { categories } from "../data/categories";
+import { visibleCategories } from "../lib/categories";
 import { CategoryPill } from "../components/store/CategoryPill";
 import { ProductCard } from "../components/store/ProductCard";
 import { Checkbox, Select } from "../components/ui/form";
@@ -14,6 +14,7 @@ type SortKey = "relevancia" | "precio-asc" | "precio-desc" | "descuento";
 export function Catalog() {
   const [params, setParams] = useSearchParams();
   const products = useDataStore((s) => s.products);
+  const categories = visibleCategories(useDataStore((s) => s.categories));
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const categoria = params.get("categoria") as CategorySlug | null;
@@ -84,7 +85,7 @@ export function Catalog() {
 
       <div className="mt-4 flex gap-2 overflow-x-auto scrollbar-none pb-2">
         <CategoryPill
-          category={{ slug: "abarrotes", name: "Todos", icon: "ShoppingBasket", color: "green" }}
+          category={{ slug: "", name: "Todos", icon: "ShoppingBasket", color: "silver", order: 0, active: true }}
           active={!categoria}
           onClick={() => updateParam("categoria", null)}
         />

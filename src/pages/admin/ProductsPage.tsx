@@ -2,7 +2,6 @@ import { Pencil, Plus, ScanBarcode, Search, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
-import { categories } from "../../data/categories";
 import { BarcodeScannerModal } from "../../components/admin/BarcodeScannerModal";
 import { DataTable, type Column } from "../../components/admin/DataTable";
 import { ProductImage } from "../../components/store/ProductImage";
@@ -49,6 +48,7 @@ function slugify(text: string) {
 export function ProductsPage() {
   const products = useDataStore((s) => s.products);
   const brands = useDataStore((s) => s.brands);
+  const categories = useDataStore((s) => s.categories);
   const addProduct = useDataStore((s) => s.addProduct);
   const updateProduct = useDataStore((s) => s.updateProduct);
   const deleteProduct = useDataStore((s) => s.deleteProduct);
@@ -73,7 +73,8 @@ export function ProductsPage() {
 
   function openCreate(prefillBarcode?: string) {
     setEditingId(null);
-    setForm(prefillBarcode ? { ...emptyForm, barcode: prefillBarcode } : emptyForm);
+    const defaultCategory = categories[0]?.slug ?? emptyForm.category;
+    setForm({ ...emptyForm, category: defaultCategory, barcode: prefillBarcode ?? "" });
     setModalOpen(true);
   }
 

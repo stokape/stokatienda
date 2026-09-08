@@ -3,21 +3,22 @@
 // localStorage a modo de "backend simulado". Cuando se conecte un backend
 // real, solo hace falta reemplazar src/services/* sin tocar los tipos ni la UI.
 
-export type CategorySlug =
-  | "abarrotes"
-  | "bebidas"
-  | "snacks"
-  | "desayuno"
-  | "frescos"
-  | "limpieza"
-  | "cuidado-personal"
-  | "mascotas";
+// Antes era una unión fija de literales; ahora las categorías son
+// administrables desde el panel (src/pages/admin/CatalogSettingsPage.tsx),
+// así que el slug es una cadena cualquiera generada al crearlas.
+export type CategorySlug = string;
+
+// Acentos de color predefinidos para que una categoría nueva siga
+// respetando la paleta e temas claro/oscuro en vez de un color libre.
+export type CategoryAccentColor = "red" | "silver" | "blue" | "amber";
 
 export interface Category {
   slug: CategorySlug;
   name: string;
-  icon: string; // nombre de icono lucide-react
-  color: string; // clase tailwind de acento
+  icon: string; // nombre de icono lucide-react (ver src/lib/icon-registry.tsx)
+  color: CategoryAccentColor;
+  order: number;
+  active: boolean; // si está apagada, se oculta de la tienda pero los productos existentes no se borran
 }
 
 export interface Brand {
@@ -221,4 +222,17 @@ export interface StoreConfig {
   deliveryZones: DeliveryZone[];
   openingHours: string;
   paymentAccounts: PaymentAccountConfig;
+}
+
+// Contenido editable de la portada (hero). Vive en el store para que el
+// panel "Contenido" lo pueda editar con vista previa en vivo sin tocar código.
+export interface SiteContent {
+  heroBadge: string;
+  heroTitleLine: string;
+  heroTitleAccent: string;
+  heroSubtitle: string;
+  heroPrimaryCta: string;
+  heroSecondaryCta: string;
+  heroBenefit1: string;
+  heroBenefit2: string;
 }

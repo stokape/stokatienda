@@ -1,7 +1,7 @@
 import { Menu, Search, ShoppingCart, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { categories } from "../../data/categories";
+import { visibleCategories } from "../../lib/categories";
 import { formatCurrency } from "../../lib/format";
 import { useCartStore } from "../../store/cartStore";
 import { useDataStore } from "../../store/dataStore";
@@ -15,6 +15,7 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const products = useDataStore((s) => s.products);
+  const categories = visibleCategories(useDataStore((s) => s.categories));
   const cartCount = useCartStore((s) => s.lines.reduce((acc, l) => acc + l.quantity, 0));
   const openCart = useCartStore((s) => s.open);
   const blurTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);

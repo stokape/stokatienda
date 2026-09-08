@@ -5,6 +5,7 @@ import {
   ClipboardList,
   FileSpreadsheet,
   LayoutDashboard,
+  LayoutTemplate,
   LogOut,
   Menu,
   ReceiptText,
@@ -34,6 +35,7 @@ const navItems = [
   { key: "proveedores", label: "Proveedores y compras", to: "/admin/proveedores", icon: Building2 },
   { key: "usuarios", label: "Usuarios y roles", to: "/admin/usuarios", icon: UserCog },
   { key: "reportes", label: "Reportes", to: "/admin/reportes", icon: FileSpreadsheet },
+  { key: "contenido", label: "Contenido", to: "/admin/contenido", icon: LayoutTemplate },
   { key: "configuracion", label: "Configuración", to: "/admin/configuracion", icon: Settings },
 ];
 

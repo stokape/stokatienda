@@ -28,6 +28,7 @@ const SuppliersPage = lazy(() => import("./pages/admin/SuppliersPage").then((m) 
 const UsersPage = lazy(() => import("./pages/admin/UsersPage").then((m) => ({ default: m.UsersPage })));
 const ReportsPage = lazy(() => import("./pages/admin/ReportsPage").then((m) => ({ default: m.ReportsPage })));
 const SettingsPage = lazy(() => import("./pages/admin/SettingsPage").then((m) => ({ default: m.SettingsPage })));
+const ContentPage = lazy(() => import("./pages/admin/ContentPage").then((m) => ({ default: m.ContentPage })));
 
 function AdminFallback() {
   return (
@@ -79,6 +80,7 @@ export default function App() {
           <Route path="proveedores" element={<SuppliersPage />} />
           <Route path="usuarios" element={<UsersPage />} />
           <Route path="reportes" element={<ReportsPage />} />
+          <Route path="contenido" element={<ContentPage />} />
           <Route path="configuracion" element={<SettingsPage />} />
         </Route>
 
