@@ -29,6 +29,7 @@ const UsersPage = lazy(() => import("./pages/admin/UsersPage").then((m) => ({ de
 const ReportsPage = lazy(() => import("./pages/admin/ReportsPage").then((m) => ({ default: m.ReportsPage })));
 const SettingsPage = lazy(() => import("./pages/admin/SettingsPage").then((m) => ({ default: m.SettingsPage })));
 const ContentPage = lazy(() => import("./pages/admin/ContentPage").then((m) => ({ default: m.ContentPage })));
+const MaintenanceSettingsPage = lazy(() => import("./pages/admin/MaintenanceSettingsPage").then((m) => ({ default: m.MaintenanceSettingsPage })));
 
 function AdminFallback() {
   return (
@@ -81,6 +82,7 @@ export default function App() {
           <Route path="usuarios" element={<UsersPage />} />
           <Route path="reportes" element={<ReportsPage />} />
           <Route path="contenido" element={<ContentPage />} />
+          <Route path="mantenimiento" element={<MaintenanceSettingsPage />} />
           <Route path="configuracion" element={<SettingsPage />} />
         </Route>
 

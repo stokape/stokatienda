@@ -6,6 +6,7 @@ import { categories as seedCategories } from "../data/categories";
 import { defaultStoreConfig } from "../data/config";
 import { customers as seedCustomers } from "../data/customers";
 import { inventoryMovements as seedMovements } from "../data/inventory";
+import { defaultMaintenanceConfig } from "../data/maintenance";
 import { orders as seedOrders } from "../data/orders";
 import { products as seedProducts } from "../data/products";
 import { defaultSiteContent } from "../data/siteContent";
@@ -19,6 +20,7 @@ import type {
   Category,
   Customer,
   InventoryMovement,
+  MaintenanceConfig,
   Order,
   OrderStatus,
   PaymentStatus,
@@ -44,6 +46,7 @@ interface DataState {
   brands: Brand[];
   categories: Category[];
   siteContent: SiteContent;
+  maintenance: MaintenanceConfig;
   orders: Order[];
   inventoryMovements: InventoryMovement[];
   suppliers: Supplier[];
@@ -71,6 +74,9 @@ interface DataState {
 
   // Contenido de la portada
   updateSiteContent: (patch: Partial<SiteContent>) => void;
+
+  // Mantenimiento
+  updateMaintenance: (patch: Partial<MaintenanceConfig>) => void;
 
   // Pedidos
   createOrder: (order: Omit<Order, "id" | "code" | "history" | "createdAt" | "status"> & { status?: OrderStatus }) => Order;
@@ -113,6 +119,7 @@ export const useDataStore = create<DataState>()(
       brands: seedBrands,
       categories: seedCategories,
       siteContent: defaultSiteContent,
+      maintenance: defaultMaintenanceConfig,
       orders: seedOrders,
       inventoryMovements: seedMovements,
       suppliers: seedSuppliers,
@@ -170,6 +177,9 @@ export const useDataStore = create<DataState>()(
 
       updateSiteContent: (patch) =>
         set((state) => ({ siteContent: { ...state.siteContent, ...patch } })),
+
+      updateMaintenance: (patch) =>
+        set((state) => ({ maintenance: { ...state.maintenance, ...patch } })),
 
       createOrder: (orderInput) => {
         const state = get();

@@ -240,3 +240,15 @@ export interface SiteContent {
   heroBenefit1: string;
   heroBenefit2: string;
 }
+
+// Modo mantenimiento: reemplaza toda la tienda pública (no el panel admin,
+// que sigue accesible para poder desactivarlo) por una pantalla de aviso.
+// "enabled" es un interruptor inmediato; "scheduled" activa una ventana de
+// fecha/hora aparte — cualquiera de los dos que esté vigente activa el modo.
+export interface MaintenanceConfig {
+  enabled: boolean;
+  scheduled: boolean;
+  startAt: string; // datetime-local, ej. "2026-09-10T08:00"
+  endAt: string;
+  message: string;
+}

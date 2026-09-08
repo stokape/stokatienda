@@ -14,6 +14,7 @@ import {
   UserCog,
   Users,
   Wallet,
+  Wrench,
   X,
 } from "lucide-react";
 import { useState } from "react";
@@ -36,6 +37,7 @@ const navItems = [
   { key: "usuarios", label: "Usuarios y roles", to: "/admin/usuarios", icon: UserCog },
   { key: "reportes", label: "Reportes", to: "/admin/reportes", icon: FileSpreadsheet },
   { key: "contenido", label: "Contenido", to: "/admin/contenido", icon: LayoutTemplate },
+  { key: "mantenimiento", label: "Mantenimiento", to: "/admin/mantenimiento", icon: Wrench },
   { key: "configuracion", label: "Configuración", to: "/admin/configuracion", icon: Settings },
 ];
 

@@ -84,6 +84,11 @@ Desde `/admin` (rol Administrador, salvo que se indique otro) se puede editar en
   y de los beneficios del hero, con **vista previa en vivo** (el mismo componente que se
   renderiza en la tienda, no una aproximación). "Restablecer al original" recupera el texto
   con el que se lanzó el sitio.
+- **Mantenimiento** (`/admin/mantenimiento`, solo Administrador) — apaga la tienda pública
+  para clientes (todas las rutas de `/`) mostrando una pantalla de aviso con mensaje editable,
+  ya sea con un interruptor inmediato o programando una ventana de fecha/hora (se activa y
+  desactiva sola, sin recargar). El panel `/admin` **nunca** se bloquea, así siempre se puede
+  entrar a apagarlo.
 - Todo lo demás documentado en la tabla de roles más abajo (productos, inventario, pedidos,
   pagos, caja, clientes, proveedores, usuarios, reportes, config de delivery/pagos).
 
