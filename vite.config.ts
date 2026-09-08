@@ -4,9 +4,10 @@ import { defineConfig } from 'vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  // GitHub Pages sirve este proyecto en /stokatienda/, no en la raíz del
-  // dominio — sin este base, los assets (JS/CSS) resolverían a rutas
-  // absolutas rotas una vez publicado.
-  base: '/stokatienda/',
+  // GitHub Pages sirve este proyecto en /stokatienda/ (subcarpeta), pero
+  // Vercel y cualquier dominio propio lo sirven en la raíz "/". `npm run
+  // deploy` (GitHub Pages) exporta GH_PAGES=1 para pedir el base correcto;
+  // el build normal (el que corre Vercel) usa la raíz.
+  base: process.env.GH_PAGES ? '/stokatienda/' : '/',
   plugins: [react(), tailwindcss()],
 })
