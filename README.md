@@ -88,7 +88,10 @@ Desde `/admin` (rol Administrador, salvo que se indique otro) se puede editar en
   para clientes (todas las rutas de `/`) mostrando una pantalla de aviso con mensaje editable,
   ya sea con un interruptor inmediato o programando una ventana de fecha/hora (se activa y
   desactiva sola, sin recargar). El panel `/admin` **nunca** se bloquea, así siempre se puede
-  entrar a apagarlo.
+  entrar a apagarlo. Si hay una ventana programada que todavía no empieza, aparece además una
+  **franja de aviso previo** (mensaje editable, con la fecha calculada automáticamente) en toda
+  la tienda para que el cliente no se sorprenda — se puede cerrar, y se vuelve a mostrar si se
+  reprograma la fecha.
 - Todo lo demás documentado en la tabla de roles más abajo (productos, inventario, pedidos,
   pagos, caja, clientes, proveedores, usuarios, reportes, config de delivery/pagos).
 

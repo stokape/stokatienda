@@ -6,4 +6,6 @@ export const defaultMaintenanceConfig: MaintenanceConfig = {
   startAt: "",
   endAt: "",
   message: "Estamos actualizando la tienda para atenderte mejor. Volvemos en breve — gracias por tu paciencia.",
+  noticeEnabled: true,
+  noticeMessage: "Tendremos mantenimiento programado — la tienda no estará disponible durante ese lapso.",
 };

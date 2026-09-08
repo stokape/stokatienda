@@ -251,4 +251,9 @@ export interface MaintenanceConfig {
   startAt: string; // datetime-local, ej. "2026-09-10T08:00"
   endAt: string;
   message: string;
+  // Aviso previo: una franja (no de pantalla completa) que se muestra en
+  // toda la tienda pública mientras hay una ventana programada que todavía
+  // no empieza, para que el cliente no se sorprenda cuando llegue la hora.
+  noticeEnabled: boolean;
+  noticeMessage: string;
 }

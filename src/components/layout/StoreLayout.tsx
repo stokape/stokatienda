@@ -4,6 +4,7 @@ import { Maintenance } from "../../pages/Maintenance";
 import { CartDrawer } from "./CartDrawer";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { MaintenanceNoticeBanner } from "./MaintenanceNoticeBanner";
 
 // El modo mantenimiento solo reemplaza la tienda pública; /admin/* es una
 // rama de rutas completamente aparte (ver App.tsx) y sigue accesible
@@ -17,6 +18,7 @@ export function StoreLayout() {
 
   return (
     <div className="flex min-h-screen flex-col bg-stoka-cream">
+      <MaintenanceNoticeBanner />
       <Header />
       <main className="flex-1">
         <Outlet />

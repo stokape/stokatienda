@@ -1,10 +1,11 @@
-import { AlertTriangle, CheckCircle2, Save } from "lucide-react";
+import { AlertTriangle, CalendarClock, CheckCircle2, Save } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { formatScheduled } from "../../components/layout/MaintenanceNoticeBanner";
 import { MaintenanceContent } from "../../components/store/MaintenanceContent";
 import { Button } from "../../components/ui/Button";
 import { Checkbox, Field, Input, Textarea } from "../../components/ui/form";
-import { isMaintenanceActive } from "../../lib/maintenance";
+import { isMaintenanceActive, isUpcomingNoticeVisible } from "../../lib/maintenance";
 import { useDataStore } from "../../store/dataStore";
 import type { MaintenanceConfig } from "../../types";
 
@@ -72,17 +73,34 @@ export function MaintenanceSettingsPage() {
             onChange={(e) => set("scheduled", e.target.checked)}
           />
           {draft.scheduled && (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Desde" htmlFor="m-start" required>
-                <Input id="m-start" type="datetime-local" value={draft.startAt} onChange={(e) => set("startAt", e.target.value)} />
-              </Field>
-              <Field label="Hasta" htmlFor="m-end" required>
-                <Input id="m-end" type="datetime-local" value={draft.endAt} onChange={(e) => set("endAt", e.target.value)} />
-              </Field>
-            </div>
+            <>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Desde" htmlFor="m-start" required>
+                  <Input id="m-start" type="datetime-local" value={draft.startAt} onChange={(e) => set("startAt", e.target.value)} />
+                </Field>
+                <Field label="Hasta" htmlFor="m-end" required>
+                  <Input id="m-end" type="datetime-local" value={draft.endAt} onChange={(e) => set("endAt", e.target.value)} />
+                </Field>
+              </div>
+
+              <div className="rounded-lg border border-stoka-border bg-stoka-surface-2 p-3">
+                <Checkbox
+                  label="Mostrar un aviso en la tienda mientras el mantenimiento aún no empieza"
+                  checked={draft.noticeEnabled}
+                  onChange={(e) => set("noticeEnabled", e.target.checked)}
+                />
+                {draft.noticeEnabled && (
+                  <div className="mt-3">
+                    <Field label="Mensaje del aviso previo" htmlFor="m-notice">
+                      <Textarea id="m-notice" value={draft.noticeMessage} onChange={(e) => set("noticeMessage", e.target.value)} />
+                    </Field>
+                  </div>
+                )}
+              </div>
+            </>
           )}
 
-          <Field label="Mensaje para los visitantes" htmlFor="m-message">
+          <Field label="Mensaje para los visitantes (pantalla completa, mientras dure)" htmlFor="m-message">
             <Textarea id="m-message" value={draft.message} onChange={(e) => set("message", e.target.value)} />
           </Field>
 
@@ -92,6 +110,20 @@ export function MaintenanceSettingsPage() {
         </div>
 
         <div className="min-w-0">
+          {draft.scheduled && draft.noticeEnabled && (
+            <>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-stoka-ink-muted">
+                Vista previa del aviso previo {isUpcomingNoticeVisible(draft) ? "" : "(no se mostraría con estas fechas)"}
+              </p>
+              <div className="mb-4 flex items-center gap-3 overflow-hidden rounded-xl border border-stoka-warning/30 bg-stoka-warning-100 px-4 py-2 text-sm text-stoka-warning">
+                <CalendarClock className="size-4 shrink-0" aria-hidden="true" />
+                <p>
+                  {draft.noticeMessage}
+                  {draft.startAt && <span className="font-semibold"> Programado para el {formatScheduled(draft.startAt)}.</span>}
+                </p>
+              </div>
+            </>
+          )}
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-stoka-ink-muted">
             Vista previa de lo que verían los clientes {draftWouldBeActive ? "" : "(actualmente no se mostraría)"}
           </p>
