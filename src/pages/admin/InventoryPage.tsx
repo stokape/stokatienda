@@ -6,7 +6,7 @@ import { BarcodeScannerModal } from "../../components/admin/BarcodeScannerModal"
 import { DataTable, type Column } from "../../components/admin/DataTable";
 import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
-import { Field, Input, Select, Textarea } from "../../components/ui/form";
+import { Checkbox, Field, Input, Select, Textarea } from "../../components/ui/form";
 import { Modal } from "../../components/ui/Modal";
 import { Tabs } from "../../components/ui/Tabs";
 import { formatDate, formatDateTime } from "../../lib/format";
@@ -29,12 +29,19 @@ const movementVariant: Record<MovementType, "green" | "blue" | "yellow" | "red" 
   devolucion: "yellow",
 };
 
+function impliedMargin(product: Product | undefined, fallback: number): number {
+  if (!product || product.costPrice <= 0) return fallback;
+  return Math.round(((product.price - product.costPrice) / product.costPrice) * 100);
+}
+
 export function InventoryPage() {
   const navigate = useNavigate();
   const [tab, setTab] = useState<"stock" | "movimientos" | "lotes">("stock");
   const products = useDataStore((s) => s.products);
   const movements = useDataStore((s) => s.inventoryMovements);
+  const config = useDataStore((s) => s.config);
   const addInventoryMovement = useDataStore((s) => s.addInventoryMovement);
+  const updateProduct = useDataStore((s) => s.updateProduct);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
@@ -44,15 +51,40 @@ export function InventoryPage() {
   const [note, setNote] = useState("");
   const [batch, setBatch] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [unitCost, setUnitCost] = useState(0);
+  const [totalCost, setTotalCost] = useState(0);
+  const [marginPercent, setMarginPercent] = useState(config.defaultMargin);
+  const [applyPrice, setApplyPrice] = useState(true);
+
+  const selectedProduct = products.find((p) => p.id === productId);
+  const suggestedPrice = Math.round(unitCost * (1 + marginPercent / 100) * 100) / 100;
 
   function openMovementModal(product?: Product) {
-    setProductId(product?.id ?? products[0]?.id ?? "");
+    const selected = product ?? products[0];
+    setProductId(selected?.id ?? "");
     setType("entrada");
     setQuantity(1);
     setNote("");
     setBatch("");
     setExpiryDate("");
+    setUnitCost(0);
+    setTotalCost(0);
+    setMarginPercent(impliedMargin(selected, config.defaultMargin));
+    setApplyPrice(true);
     setModalOpen(true);
+  }
+
+  function handleQuantityChange(nextQty: number) {
+    setQuantity(nextQty);
+    setTotalCost(Math.round(unitCost * nextQty * 100) / 100);
+  }
+  function handleUnitCostChange(value: number) {
+    setUnitCost(value);
+    setTotalCost(Math.round(value * quantity * 100) / 100);
+  }
+  function handleTotalCostChange(value: number) {
+    setTotalCost(value);
+    setUnitCost(quantity > 0 ? Math.round((value / quantity) * 100) / 100 : 0);
   }
 
   function handleScan(code: string) {
@@ -88,7 +120,20 @@ export function InventoryPage() {
       expiryDate: expiryDate || undefined,
       createdBy: "Panel administrativo",
     });
-    toast.success("Movimiento registrado y stock actualizado");
+
+    if (type === "entrada" && unitCost > 0) {
+      updateProduct(productId, {
+        costPrice: unitCost,
+        ...(applyPrice ? { price: suggestedPrice } : {}),
+      });
+      toast.success(
+        applyPrice
+          ? `Movimiento registrado — costo y precio de venta actualizados (S/ ${suggestedPrice.toFixed(2)})`
+          : "Movimiento registrado — costo del producto actualizado",
+      );
+    } else {
+      toast.success("Movimiento registrado y stock actualizado");
+    }
     setModalOpen(false);
   }
 
@@ -203,10 +248,17 @@ export function InventoryPage() {
           ))}
       </div>
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Registrar movimiento de inventario">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Registrar movimiento de inventario" size="lg">
         <form onSubmit={handleSave} className="grid gap-4 sm:grid-cols-2">
           <Field label="Producto" htmlFor="mv-product" required>
-            <Select id="mv-product" value={productId} onChange={(e) => setProductId(e.target.value)}>
+            <Select
+              id="mv-product"
+              value={productId}
+              onChange={(e) => {
+                setProductId(e.target.value);
+                setMarginPercent(impliedMargin(products.find((p) => p.id === e.target.value), config.defaultMargin));
+              }}
+            >
               {products.map((p) => (
                 <option key={p.id} value={p.id}>{p.name}</option>
               ))}
@@ -220,11 +272,48 @@ export function InventoryPage() {
             </Select>
           </Field>
           <Field label="Cantidad" htmlFor="mv-qty" required hint="Se aplicará como salida en ventas y mermas">
-            <Input id="mv-qty" type="number" min={1} value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} />
+            <Input id="mv-qty" type="number" min={1} value={quantity} onChange={(e) => handleQuantityChange(Number(e.target.value))} />
           </Field>
           <Field label="Lote (opcional)" htmlFor="mv-batch">
             <Input id="mv-batch" value={batch} onChange={(e) => setBatch(e.target.value)} />
           </Field>
+
+          {type === "entrada" && (
+            <div className="rounded-xl border border-stoka-border bg-stoka-surface-2 p-4 sm:col-span-2">
+              <p className="mb-3 text-sm font-semibold text-stoka-ink">
+                Costo de esta compra
+                {selectedProduct && (
+                  <span className="ml-2 font-normal text-stoka-ink-muted">
+                    (costo actual: S/ {selectedProduct.costPrice.toFixed(2)} · precio actual: S/ {selectedProduct.price.toFixed(2)})
+                  </span>
+                )}
+              </p>
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field label="Costo unitario (S/)" htmlFor="mv-unit-cost" hint="Lo que pagaste por cada unidad">
+                  <Input id="mv-unit-cost" type="number" min={0} step={0.01} value={unitCost} onChange={(e) => handleUnitCostChange(Number(e.target.value))} />
+                </Field>
+                <Field label="Costo total de la compra (S/)" htmlFor="mv-total-cost" hint={`Para ${quantity} unidad(es)`}>
+                  <Input id="mv-total-cost" type="number" min={0} step={0.01} value={totalCost} onChange={(e) => handleTotalCostChange(Number(e.target.value))} />
+                </Field>
+                <Field label="Margen deseado (%)" htmlFor="mv-margin">
+                  <Input id="mv-margin" type="number" step={1} value={marginPercent} onChange={(e) => setMarginPercent(Number(e.target.value))} />
+                </Field>
+              </div>
+              {unitCost > 0 && (
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-stoka-surface p-3">
+                  <p className="text-sm text-stoka-ink">
+                    Precio de venta sugerido: <span className="font-display text-lg font-bold text-stoka-red">S/ {suggestedPrice.toFixed(2)}</span>
+                  </p>
+                  <Checkbox
+                    label="Actualizar el precio de venta del producto"
+                    checked={applyPrice}
+                    onChange={(e) => setApplyPrice(e.target.checked)}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
           <Field label="Fecha de vencimiento (opcional)" htmlFor="mv-expiry">
             <Input id="mv-expiry" type="date" value={expiryDate} onChange={(e) => setExpiryDate(e.target.value)} />
           </Field>

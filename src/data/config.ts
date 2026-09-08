@@ -5,6 +5,7 @@ import type { StoreConfig } from "../types";
 export const defaultStoreConfig: StoreConfig = {
   freeDeliveryThreshold: 60,
   defaultDeliveryFee: 6,
+  defaultMargin: 30,
   openingHours: "Lun. a Dom. de 7:00 a. m. a 10:00 p. m.",
   deliveryZones: [
     { id: "z-sjl", district: "San Juan de Lurigancho", fee: 6, etaMinutes: 40 },

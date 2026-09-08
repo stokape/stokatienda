@@ -59,6 +59,17 @@ leer el código de barras de un producto físico:
   cargado en el formulario.
 - Si no hay cámara disponible o el permiso es denegado, siempre queda la alternativa de
   ingresar el código a mano — el flujo nunca se bloquea por falta de cámara.
+- Funciona desde cualquier dispositivo con cámara y navegador (celular incluido), ya que usa
+  la cámara del propio navegador — no requiere una app nativa.
+
+## Costo de compra y margen de ganancia
+
+Al **registrar una entrada de stock** (en Inventario, con o sin escaneo previo) se puede
+indicar el costo de esa compra en **costo unitario o costo total** — se recalculan entre sí
+automáticamente según la cantidad. Con un **margen deseado (%)** (prellenado desde
+Configuración → Ganancia, o desde el margen actual del producto si ya tenía costo cargado),
+se muestra un **precio de venta sugerido**; con la casilla marcada, al guardar el movimiento
+se actualiza tanto el costo como el precio de venta del producto.
 
 ## Qué es administrable sin tocar código
 

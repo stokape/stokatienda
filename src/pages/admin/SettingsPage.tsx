@@ -53,6 +53,19 @@ export function SettingsPage() {
       </section>
 
       <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
+        <h2 className="mb-4 font-semibold text-stoka-green-900">Ganancia</h2>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Field
+            label="Margen de ganancia por defecto (%)"
+            htmlFor="default-margin"
+            hint="Se sugiere al registrar una entrada de stock con costo, en Inventario."
+          >
+            <Input id="default-margin" type="number" min={0} step={1} value={form.defaultMargin} onChange={(e) => setForm({ ...form, defaultMargin: Number(e.target.value) })} />
+          </Field>
+        </div>
+      </section>
+
+      <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="font-semibold text-stoka-green-900">Zonas de delivery</h2>
           <Button type="button" variant="ghost" size="sm" onClick={addZone} icon={<Plus className="size-4" aria-hidden="true" />}>

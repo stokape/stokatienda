@@ -361,6 +361,19 @@ export const useDataStore = create<DataState>()(
 
       updateConfig: (patch) => set((state) => ({ config: { ...state.config, ...patch } })),
     }),
-    { name: "stoka-data-store", version: 1 },
+    {
+      name: "stoka-data-store",
+      version: 2,
+      // v1 -> v2: se agregó StoreConfig.defaultMargin. Zustand solo mezcla
+      // claves de nivel superior al rehidratar — "config" completo vendría
+      // del localStorage viejo sin ese campo, así que se completa a mano.
+      migrate: (persisted, version) => {
+        const state = persisted as DataState;
+        if (version < 2 && state?.config) {
+          state.config = { ...defaultStoreConfig, ...state.config };
+        }
+        return state;
+      },
+    },
   ),
 );

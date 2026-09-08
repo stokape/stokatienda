@@ -222,6 +222,10 @@ export interface StoreConfig {
   deliveryZones: DeliveryZone[];
   openingHours: string;
   paymentAccounts: PaymentAccountConfig;
+  // Margen de ganancia sugerido (%) al registrar una entrada de stock con
+  // costo, para calcular un precio de venta propuesto. Cada producto puede
+  // terminar con un margen distinto una vez editado a mano.
+  defaultMargin: number;
 }
 
 // Contenido editable de la portada (hero). Vive en el store para que el
