@@ -1,0 +1,15 @@
+{
+  "name": "STOKA BODEGA",
+  "short_name": "STOKA",
+  "description": "Tu tienda, más simple.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0D0D0F",
+  "theme_color": "#0D0D0F",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/favicon.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
