@@ -10,6 +10,7 @@ import {
   Menu,
   ReceiptText,
   Settings,
+  ShoppingBasket,
   Tags,
   UserCog,
   Users,
@@ -26,6 +27,7 @@ import { ThemeToggle } from "../ui/ThemeToggle";
 
 const navItems = [
   { key: "dashboard", label: "Dashboard", to: "/admin", icon: LayoutDashboard },
+  { key: "venta-rapida", label: "Venta rápida", to: "/admin/venta-rapida", icon: ShoppingBasket },
   { key: "productos", label: "Productos", to: "/admin/productos", icon: Boxes },
   { key: "catalogo", label: "Categorías y marcas", to: "/admin/catalogo", icon: Tags },
   { key: "inventario", label: "Inventario", to: "/admin/inventario", icon: ClipboardList },

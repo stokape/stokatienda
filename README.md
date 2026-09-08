@@ -31,8 +31,8 @@ Credenciales de demostración (también visibles en la propia pantalla de login)
 
 | Rol | Usuario | Contraseña | Acceso |
 |---|---|---|---|
-| Administrador | `admin` | `admin123` | Todo el panel: productos, inventario, pedidos, validar pagos, caja, clientes, proveedores, **usuarios/roles**, reportes, configuración |
-| Cajero | `cajero` | `cajero123` | Dashboard, pedidos, validar pagos, caja, clientes |
+| Administrador | `admin` | `admin123` | Todo el panel: venta rápida, productos, inventario, pedidos, validar pagos, caja, clientes, proveedores, **usuarios/roles**, reportes, configuración |
+| Cajero | `cajero` | `cajero123` | Dashboard, venta rápida, pedidos, validar pagos, caja, clientes |
 | Almacén | `almacen` | `almacen123` | Dashboard, productos, inventario (incluye escaneo de código de barras), proveedores |
 | Repartidor | `repartidor` | `reparto123` | Dashboard, pedidos (actualiza estado de entrega) |
 
@@ -61,6 +61,21 @@ leer el código de barras de un producto físico:
   ingresar el código a mano — el flujo nunca se bloquea por falta de cámara.
 - Funciona desde cualquier dispositivo con cámara y navegador (celular incluido), ya que usa
   la cámara del propio navegador — no requiere una app nativa.
+
+## Venta rápida (mostrador)
+
+Para una compra que el cliente paga **físicamente en la tienda** (no por el checkout online) hay
+dos formas de descontar el stock, según qué más necesites:
+
+- **Inventario → Registrar movimiento → tipo "Venta"** (o escaneando el código de barras): la
+  forma más simple, solo descuenta el stock. No genera un pedido, así que no se refleja en
+  Dashboard, Reportes ni Caja — útil si solo te interesa que el inventario quede correcto.
+- **`/admin/venta-rapida`** (roles Administrador y Cajero): un mini punto de venta — busca o
+  escanea productos, arma el carrito, elige el método de pago y cobra. Esto sí crea un pedido
+  interno marcado como entregado, así que cuenta en "Ventas de hoy" y utilidad del Dashboard, en
+  Reportes, y — si el pago es en efectivo y la caja está abierta — se suma automáticamente como
+  ingreso en el arqueo de Caja (si la caja está cerrada, la venta se registra igual, con un aviso
+  de que ese efectivo no quedó en el arqueo del día).
 
 ## Delivery (apagado por defecto)
 
