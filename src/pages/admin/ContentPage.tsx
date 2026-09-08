@@ -64,7 +64,7 @@ export function ContentPage() {
           <Field label="Botón secundario" htmlFor="c-cta2" hint="Lleva a las ofertas">
             <Input id="c-cta2" value={draft.heroSecondaryCta} onChange={(e) => set("heroSecondaryCta", e.target.value)} />
           </Field>
-          <Field label="Beneficio 1 (ícono de camión)" htmlFor="c-benefit1">
+          <Field label="Beneficio 1 (ícono de tienda)" htmlFor="c-benefit1">
             <Input id="c-benefit1" value={draft.heroBenefit1} onChange={(e) => set("heroBenefit1", e.target.value)} />
           </Field>
           <Field label="Beneficio 2 (ícono de escudo)" htmlFor="c-benefit2">

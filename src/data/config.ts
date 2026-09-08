@@ -3,6 +3,7 @@ import type { StoreConfig } from "../types";
 // Configuración simulada: en producción estos datos vendrían de un backend
 // y las credenciales de pago se guardarían fuera del cliente.
 export const defaultStoreConfig: StoreConfig = {
+  deliveryEnabled: false,
   freeDeliveryThreshold: 60,
   defaultDeliveryFee: 6,
   defaultMargin: 30,

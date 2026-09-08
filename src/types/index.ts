@@ -217,6 +217,10 @@ export interface DeliveryZone {
 }
 
 export interface StoreConfig {
+  // El negocio de momento no reparte a domicilio: en falso, el checkout solo
+  // ofrece recojo en tienda y se ocultan precios/zonas de delivery en toda
+  // la tienda. Queda listo para reactivarse el día que sí hagan envíos.
+  deliveryEnabled: boolean;
   freeDeliveryThreshold: number;
   defaultDeliveryFee: number;
   deliveryZones: DeliveryZone[];

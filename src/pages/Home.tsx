@@ -1,4 +1,4 @@
-import { ArrowRight, Banknote, Landmark, ShieldCheck, Smartphone, Truck } from "lucide-react";
+import { ArrowRight, Banknote, Landmark, ShieldCheck, Smartphone, Store, Truck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { visibleCategories } from "../lib/categories";
 import { Hero } from "../components/store/Hero";
@@ -9,6 +9,7 @@ import { useDataStore } from "../store/dataStore";
 export function Home() {
   const products = useDataStore((s) => s.products);
   const categories = visibleCategories(useDataStore((s) => s.categories));
+  const deliveryEnabled = useDataStore((s) => s.config.deliveryEnabled);
   const featured = products.filter((p) => p.featured).slice(0, 8);
   const offers = products.filter((p) => p.compareAtPrice).slice(0, 4);
 
@@ -68,11 +69,23 @@ export function Home() {
       <section className="border-t border-stoka-cream-300 bg-stoka-surface py-10">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
           <div className="flex items-start gap-3">
-            <Truck className="size-6 shrink-0 text-stoka-green-600" aria-hidden="true" />
-            <div>
-              <p className="font-semibold text-stoka-green-900">Delivery rápido</p>
-              <p className="text-sm text-slate-500">Recibe tu pedido el mismo día en tu zona.</p>
-            </div>
+            {deliveryEnabled ? (
+              <>
+                <Truck className="size-6 shrink-0 text-stoka-green-600" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-stoka-green-900">Delivery rápido</p>
+                  <p className="text-sm text-slate-500">Recibe tu pedido el mismo día en tu zona.</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <Store className="size-6 shrink-0 text-stoka-green-600" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-stoka-green-900">Recojo en tienda</p>
+                  <p className="text-sm text-slate-500">Pide online y recógelo cuando te acomode.</p>
+                </div>
+              </>
+            )}
           </div>
           <div className="flex items-start gap-3">
             <Smartphone className="size-6 shrink-0 text-stoka-green-600" aria-hidden="true" />
@@ -92,7 +105,9 @@ export function Home() {
             <Banknote className="size-6 shrink-0 text-stoka-green-600" aria-hidden="true" />
             <div>
               <p className="font-semibold text-stoka-green-900">Efectivo</p>
-              <p className="text-sm text-slate-500">Paga contra entrega si lo prefieres así.</p>
+              <p className="text-sm text-slate-500">
+                {deliveryEnabled ? "Paga contra entrega si lo prefieres así." : "Paga en efectivo al recoger tu pedido."}
+              </p>
             </div>
           </div>
         </div>

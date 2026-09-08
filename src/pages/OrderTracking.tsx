@@ -13,7 +13,7 @@ const paymentLabels: Record<PaymentMethod, string> = {
   plin: "Plin",
   transferencia: "Transferencia bancaria",
   "transferencia-interbancaria": "Transferencia interbancaria",
-  efectivo: "Efectivo contra entrega",
+  efectivo: "Efectivo",
 };
 
 const paymentIcons: Record<PaymentMethod, typeof Smartphone> = {

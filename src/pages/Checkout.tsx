@@ -27,7 +27,7 @@ const paymentOptions: { value: PaymentMethod; label: string; icon: typeof Smartp
   { value: "plin", label: "Plin", icon: Smartphone, hint: "Escanea el QR o usa el número" },
   { value: "transferencia", label: "Transferencia bancaria", icon: Landmark, hint: "Cuenta corriente BCP" },
   { value: "transferencia-interbancaria", label: "Transferencia interbancaria", icon: Landmark, hint: "Usa el CCI" },
-  { value: "efectivo", label: "Efectivo contra entrega", icon: Banknote, hint: "Paga cuando recibas tu pedido" },
+  { value: "efectivo", label: "Efectivo", icon: Banknote, hint: "Paga cuando recibas tu pedido" },
 ];
 
 export function Checkout() {
@@ -38,7 +38,7 @@ export function Checkout() {
   const cartLines = useCartStore((s) => s.lines);
   const clearCart = useCartStore((s) => s.clear);
 
-  const [fulfillment, setFulfillment] = useState<FulfillmentType>("delivery");
+  const [fulfillment, setFulfillment] = useState<FulfillmentType>(config.deliveryEnabled ? "delivery" : "recojo");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -182,25 +182,33 @@ export function Checkout() {
           </section>
 
           <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5 sm:p-6">
-            <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">2. Entrega</h2>
-            <div className="mb-4 flex gap-2">
-              {(["delivery", "recojo"] as FulfillmentType[]).map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setFulfillment(opt)}
-                  className={`flex-1 cursor-pointer rounded-xl border-2 px-4 py-3 text-sm font-semibold transition-colors ${
-                    fulfillment === opt
-                      ? "border-stoka-green-600 bg-stoka-green-50 text-stoka-green-700"
-                      : "border-stoka-border text-slate-500"
-                  }`}
-                >
-                  {opt === "delivery" ? "Delivery a domicilio" : "Recojo en tienda"}
-                </button>
-              ))}
-            </div>
+            <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">
+              {config.deliveryEnabled ? "2. Entrega" : "2. Recojo en tienda"}
+            </h2>
+            {config.deliveryEnabled ? (
+              <div className="mb-4 flex gap-2">
+                {(["delivery", "recojo"] as FulfillmentType[]).map((opt) => (
+                  <button
+                    key={opt}
+                    type="button"
+                    onClick={() => setFulfillment(opt)}
+                    className={`flex-1 cursor-pointer rounded-xl border-2 px-4 py-3 text-sm font-semibold transition-colors ${
+                      fulfillment === opt
+                        ? "border-stoka-green-600 bg-stoka-green-50 text-stoka-green-700"
+                        : "border-stoka-border text-slate-500"
+                    }`}
+                  >
+                    {opt === "delivery" ? "Delivery a domicilio" : "Recojo en tienda"}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <p className="mb-4 text-sm text-stoka-ink-muted">
+                Por ahora solo atendemos con recojo en tienda — elige la fecha y horario que te acomode abajo.
+              </p>
+            )}
 
-            {fulfillment === "delivery" && (
+            {config.deliveryEnabled && fulfillment === "delivery" && (
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field label="Distrito" htmlFor="district" error={errors.district} required>
                   <Select id="district" value={district} onChange={(e) => setDistrict(e.target.value)}>
@@ -355,10 +363,12 @@ export function Checkout() {
                 <span>-{formatCurrency(savings)}</span>
               </div>
             )}
-            <div className="flex justify-between text-slate-500">
-              <span>Delivery</span>
-              <span>{deliveryFee === 0 ? "Gratis" : formatCurrency(deliveryFee)}</span>
-            </div>
+            {config.deliveryEnabled && (
+              <div className="flex justify-between text-slate-500">
+                <span>Delivery</span>
+                <span>{deliveryFee === 0 ? "Gratis" : formatCurrency(deliveryFee)}</span>
+              </div>
+            )}
             <div className="flex justify-between pt-1.5 text-base font-bold text-stoka-green-900">
               <span>Total</span>
               <span>{formatCurrency(total)}</span>

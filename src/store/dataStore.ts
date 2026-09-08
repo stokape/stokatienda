@@ -373,13 +373,14 @@ export const useDataStore = create<DataState>()(
     }),
     {
       name: "stoka-data-store",
-      version: 2,
-      // v1 -> v2: se agregó StoreConfig.defaultMargin. Zustand solo mezcla
-      // claves de nivel superior al rehidratar — "config" completo vendría
-      // del localStorage viejo sin ese campo, así que se completa a mano.
+      version: 3,
+      // Zustand solo mezcla claves de nivel superior al rehidratar — "config"
+      // completo vendría del localStorage viejo sin los campos agregados en
+      // versiones posteriores (v2: defaultMargin; v3: deliveryEnabled), así
+      // que se completa a mano contra los valores por defecto actuales.
       migrate: (persisted, version) => {
         const state = persisted as DataState;
-        if (version < 2 && state?.config) {
+        if (version < 3 && state?.config) {
           state.config = { ...defaultStoreConfig, ...state.config };
         }
         return state;

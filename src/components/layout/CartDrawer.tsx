@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useCartSummary } from "../../lib/cart";
 import { formatCurrency } from "../../lib/format";
 import { useCartStore } from "../../store/cartStore";
+import { useDataStore } from "../../store/dataStore";
 import { ProductImage } from "../store/ProductImage";
 import { QuantityStepper } from "../store/QuantityStepper";
 import { Button } from "../ui/Button";
@@ -15,7 +16,8 @@ export function CartDrawer() {
   const setQuantity = useCartStore((s) => s.setQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
   const navigate = useNavigate();
-  const summary = useCartSummary("delivery");
+  const deliveryEnabled = useDataStore((s) => s.config.deliveryEnabled);
+  const summary = useCartSummary(deliveryEnabled ? "delivery" : "recojo");
 
   useEffect(() => {
     if (!isOpen) return;
@@ -81,7 +83,7 @@ export function CartDrawer() {
         ) : (
           <>
             <div className="flex-1 overflow-y-auto px-5 py-4">
-              {summary.amountToFreeDelivery > 0 && (
+              {deliveryEnabled && summary.amountToFreeDelivery > 0 && (
                 <p className="mb-4 flex items-center gap-2 rounded-lg border border-stoka-warning/30 bg-stoka-warning-100 px-3 py-2 text-sm font-bold text-stoka-warning shadow-card">
                   <Sparkles className="size-4 shrink-0" aria-hidden="true" />
                   Te faltan {formatCurrency(summary.amountToFreeDelivery)} para delivery gratis
@@ -136,10 +138,12 @@ export function CartDrawer() {
                     <span>-{formatCurrency(summary.savings)}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-slate-500">
-                  <span>Delivery estimado</span>
-                  <span>{summary.deliveryFee === 0 ? "Gratis" : formatCurrency(summary.deliveryFee)}</span>
-                </div>
+                {deliveryEnabled && (
+                  <div className="flex justify-between text-slate-500">
+                    <span>Delivery estimado</span>
+                    <span>{summary.deliveryFee === 0 ? "Gratis" : formatCurrency(summary.deliveryFee)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between pt-1 text-base font-bold text-stoka-green-900">
                   <span>Total</span>
                   <span>{formatCurrency(summary.total)}</span>

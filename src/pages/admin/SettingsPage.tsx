@@ -2,7 +2,7 @@ import { Plus, Save, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../../components/ui/Button";
-import { Field, Input } from "../../components/ui/form";
+import { Checkbox, Field, Input } from "../../components/ui/form";
 import { useDataStore } from "../../store/dataStore";
 import type { DeliveryZone, StoreConfig } from "../../types";
 
@@ -39,13 +39,29 @@ export function SettingsPage() {
 
       <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
         <h2 className="mb-4 font-semibold text-stoka-green-900">Delivery general</h2>
+        <div className="mb-4">
+          <Checkbox
+            label="Delivery habilitado"
+            checked={form.deliveryEnabled}
+            onChange={(e) => setForm({ ...form, deliveryEnabled: e.target.checked })}
+          />
+          <p className="mt-1 text-xs text-stoka-ink-muted">
+            {form.deliveryEnabled
+              ? "El checkout ofrece delivery y recojo en tienda."
+              : "El checkout solo ofrece recojo en tienda — actívalo cuando el negocio empiece a repartir a domicilio."}
+          </p>
+        </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          <Field label="Delivery gratis desde (S/)" htmlFor="threshold">
-            <Input id="threshold" type="number" min={0} value={form.freeDeliveryThreshold} onChange={(e) => setForm({ ...form, freeDeliveryThreshold: Number(e.target.value) })} />
-          </Field>
-          <Field label="Tarifa de delivery por defecto (S/)" htmlFor="default-fee">
-            <Input id="default-fee" type="number" min={0} value={form.defaultDeliveryFee} onChange={(e) => setForm({ ...form, defaultDeliveryFee: Number(e.target.value) })} />
-          </Field>
+          {form.deliveryEnabled && (
+            <>
+              <Field label="Delivery gratis desde (S/)" htmlFor="threshold">
+                <Input id="threshold" type="number" min={0} value={form.freeDeliveryThreshold} onChange={(e) => setForm({ ...form, freeDeliveryThreshold: Number(e.target.value) })} />
+              </Field>
+              <Field label="Tarifa de delivery por defecto (S/)" htmlFor="default-fee">
+                <Input id="default-fee" type="number" min={0} value={form.defaultDeliveryFee} onChange={(e) => setForm({ ...form, defaultDeliveryFee: Number(e.target.value) })} />
+              </Field>
+            </>
+          )}
           <Field label="Horario de atención" htmlFor="hours">
             <Input id="hours" value={form.openingHours} onChange={(e) => setForm({ ...form, openingHours: e.target.value })} />
           </Field>
@@ -65,32 +81,34 @@ export function SettingsPage() {
         </div>
       </section>
 
-      <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-semibold text-stoka-green-900">Zonas de delivery</h2>
-          <Button type="button" variant="ghost" size="sm" onClick={addZone} icon={<Plus className="size-4" aria-hidden="true" />}>
-            Agregar zona
-          </Button>
-        </div>
-        <div className="flex flex-col gap-3">
-          {form.deliveryZones.map((zone) => (
-            <div key={zone.id} className="grid grid-cols-[1fr_100px_100px_auto] items-end gap-2">
-              <Field label="Distrito" htmlFor={`z-district-${zone.id}`}>
-                <Input id={`z-district-${zone.id}`} value={zone.district} onChange={(e) => updateZone(zone.id, { district: e.target.value })} />
-              </Field>
-              <Field label="Tarifa (S/)" htmlFor={`z-fee-${zone.id}`}>
-                <Input id={`z-fee-${zone.id}`} type="number" min={0} value={zone.fee} onChange={(e) => updateZone(zone.id, { fee: Number(e.target.value) })} />
-              </Field>
-              <Field label="ETA (min)" htmlFor={`z-eta-${zone.id}`}>
-                <Input id={`z-eta-${zone.id}`} type="number" min={0} value={zone.etaMinutes} onChange={(e) => updateZone(zone.id, { etaMinutes: Number(e.target.value) })} />
-              </Field>
-              <button type="button" onClick={() => removeZone(zone.id)} aria-label="Eliminar zona" className="mb-1 cursor-pointer rounded-lg p-2 text-stoka-red-dark hover:bg-stoka-red-100">
-                <Trash2 className="size-4" aria-hidden="true" />
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
+      {form.deliveryEnabled && (
+        <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-semibold text-stoka-green-900">Zonas de delivery</h2>
+            <Button type="button" variant="ghost" size="sm" onClick={addZone} icon={<Plus className="size-4" aria-hidden="true" />}>
+              Agregar zona
+            </Button>
+          </div>
+          <div className="flex flex-col gap-3">
+            {form.deliveryZones.map((zone) => (
+              <div key={zone.id} className="grid grid-cols-[1fr_100px_100px_auto] items-end gap-2">
+                <Field label="Distrito" htmlFor={`z-district-${zone.id}`}>
+                  <Input id={`z-district-${zone.id}`} value={zone.district} onChange={(e) => updateZone(zone.id, { district: e.target.value })} />
+                </Field>
+                <Field label="Tarifa (S/)" htmlFor={`z-fee-${zone.id}`}>
+                  <Input id={`z-fee-${zone.id}`} type="number" min={0} value={zone.fee} onChange={(e) => updateZone(zone.id, { fee: Number(e.target.value) })} />
+                </Field>
+                <Field label="ETA (min)" htmlFor={`z-eta-${zone.id}`}>
+                  <Input id={`z-eta-${zone.id}`} type="number" min={0} value={zone.etaMinutes} onChange={(e) => updateZone(zone.id, { etaMinutes: Number(e.target.value) })} />
+                </Field>
+                <button type="button" onClick={() => removeZone(zone.id)} aria-label="Eliminar zona" className="mb-1 cursor-pointer rounded-lg p-2 text-stoka-red-dark hover:bg-stoka-red-100">
+                  <Trash2 className="size-4" aria-hidden="true" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
         <h2 className="mb-4 font-semibold text-stoka-green-900">Cuentas de pago</h2>

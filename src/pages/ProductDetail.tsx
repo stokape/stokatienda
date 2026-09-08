@@ -1,4 +1,4 @@
-import { ChevronRight, PackageX, ShieldCheck, ShoppingCart, Truck } from "lucide-react";
+import { ChevronRight, PackageX, ShieldCheck, ShoppingCart, Store, Truck } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Link, useParams } from "react-router-dom";
@@ -17,6 +17,7 @@ export function ProductDetail() {
   const products = useDataStore((s) => s.products);
   const brands = useDataStore((s) => s.brands);
   const categories = useDataStore((s) => s.categories);
+  const deliveryEnabled = useDataStore((s) => s.config.deliveryEnabled);
   const product = products.find((p) => p.slug === slug);
   const [quantity, setQuantity] = useState(1);
   const addItem = useCartStore((s) => s.addItem);
@@ -104,7 +105,15 @@ export function ProductDetail() {
 
           <div className="mt-6 flex flex-col gap-2 rounded-xl border-2 border-stoka-green-600/20 bg-stoka-green-50 p-4 text-sm text-stoka-green-800">
             <span className="flex items-center gap-2">
-              <Truck className="size-4 shrink-0" aria-hidden="true" /> Delivery el mismo día en tu distrito
+              {deliveryEnabled ? (
+                <>
+                  <Truck className="size-4 shrink-0" aria-hidden="true" /> Delivery el mismo día en tu distrito
+                </>
+              ) : (
+                <>
+                  <Store className="size-4 shrink-0" aria-hidden="true" /> Recojo rápido en tienda
+                </>
+              )}
             </span>
             <span className="flex items-center gap-2">
               <ShieldCheck className="size-4 shrink-0" aria-hidden="true" /> Yape, Plin, transferencia o efectivo

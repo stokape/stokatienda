@@ -62,6 +62,19 @@ leer el código de barras de un producto físico:
 - Funciona desde cualquier dispositivo con cámara y navegador (celular incluido), ya que usa
   la cámara del propio navegador — no requiere una app nativa.
 
+## Delivery (apagado por defecto)
+
+El negocio de momento solo atiende con **recojo en tienda** — en Configuración → Delivery
+general hay un interruptor **"Delivery habilitado"** (apagado por defecto). Mientras está
+apagado: el checkout no ofrece la opción de delivery ni pide dirección/distrito, se ocultan
+"Zonas de delivery" y las tarifas, y toda mención a delivery en la tienda (portada, carrito,
+ficha de producto) se ajusta sola a recojo. Actívalo el día que empiecen a repartir a
+domicilio — toda la lógica de zonas, tarifas y delivery gratis ya existe, solo estaba oculta.
+
+Los **descuentos siguen siendo la única palanca de precio**, y son 100% manuales por
+producto: el admin define el precio de venta y, opcionalmente, un "precio tachado" (oferta)
+en Productos — no hay cupones ni descuentos automáticos por ahora.
+
 ## Costo de compra y margen de ganancia
 
 Al **registrar una entrada de stock** (en Inventario, con o sin escaneo previo) se puede

@@ -1,4 +1,4 @@
-import { ArrowRight, Percent, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, Percent, ShieldCheck, Store } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ProductImage } from "./ProductImage";
 import { buttonVariants } from "../ui/Button";
@@ -60,7 +60,7 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
           </div>
           <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-stoka-ink-muted">
             <span className="flex items-center gap-2">
-              <Truck className="size-4 text-stoka-red" aria-hidden="true" /> {content.heroBenefit1}
+              <Store className="size-4 text-stoka-red" aria-hidden="true" /> {content.heroBenefit1}
             </span>
             <span className="flex items-center gap-2">
               <ShieldCheck className="size-4 text-stoka-red" aria-hidden="true" /> {content.heroBenefit2}
