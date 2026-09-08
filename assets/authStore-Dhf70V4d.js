@@ -1,0 +1,1 @@
+import{o as e,s as t}from"./jsx-runtime-CsKkn1_h.js";var n=t()(e(e=>({currentUser:null,login:t=>e({currentUser:t}),logout:()=>e({currentUser:null})}),{name:`stoka-auth`}));export{n as t};
