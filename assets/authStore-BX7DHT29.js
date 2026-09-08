@@ -1,1 +1,0 @@
-import{a as e,o as t}from"./jsx-runtime-Bt57FlrH.js";var n=t()(e(e=>({currentUser:null,login:t=>e({currentUser:t}),logout:()=>e({currentUser:null})}),{name:`stoka-auth`}));export{n as t};
