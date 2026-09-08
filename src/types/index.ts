@@ -1,0 +1,224 @@
+// Tipos centrales del dominio STOKA BODEGA.
+// La capa de datos (src/data + src/store) implementa estas formas sobre
+// localStorage a modo de "backend simulado". Cuando se conecte un backend
+// real, solo hace falta reemplazar src/services/* sin tocar los tipos ni la UI.
+
+export type CategorySlug =
+  | "abarrotes"
+  | "bebidas"
+  | "snacks"
+  | "desayuno"
+  | "frescos"
+  | "limpieza"
+  | "cuidado-personal"
+  | "mascotas";
+
+export interface Category {
+  slug: CategorySlug;
+  name: string;
+  icon: string; // nombre de icono lucide-react
+  color: string; // clase tailwind de acento
+}
+
+export interface Brand {
+  id: string;
+  name: string;
+}
+
+export interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  presentation: string; // "1 kg", "500 ml", "x6 unidades"
+  category: CategorySlug;
+  brandId: string;
+  sku: string;
+  barcode: string;
+  price: number; // precio de venta actual (soles)
+  compareAtPrice?: number; // precio tachado si hay descuento
+  costPrice: number;
+  stock: number;
+  minStock: number;
+  unit: "unidad" | "kg" | "litro" | "paquete";
+  featured?: boolean;
+  tags?: string[];
+  description: string;
+  imageHue: number; // 0-360, usado para generar la ilustración de producto
+  imageIcon: string; // nombre de icono lucide-react para la ilustración
+  createdAt: string;
+}
+
+export type PaymentMethod =
+  | "yape"
+  | "plin"
+  | "transferencia"
+  | "transferencia-interbancaria"
+  | "efectivo";
+
+export type PaymentStatus =
+  | "pendiente"
+  | "en_revision"
+  | "validado"
+  | "rechazado"
+  | "vencido";
+
+export type OrderStatus =
+  | "recibido"
+  | "pendiente_pago"
+  | "pago_en_revision"
+  | "confirmado"
+  | "preparando"
+  | "en_reparto"
+  | "entregado"
+  | "cancelado";
+
+export type FulfillmentType = "delivery" | "recojo";
+
+export interface OrderItem {
+  productId: string;
+  name: string;
+  presentation: string;
+  price: number;
+  quantity: number;
+}
+
+export interface PaymentProof {
+  id: string;
+  method: PaymentMethod;
+  operationNumber?: string;
+  fileName?: string;
+  amount: number;
+  status: PaymentStatus;
+  submittedAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+  reviewNote?: string;
+}
+
+export interface OrderStatusEvent {
+  status: OrderStatus;
+  at: string;
+  note?: string;
+}
+
+export interface Order {
+  id: string;
+  code: string; // ej. "STK-10234"
+  customer: {
+    name: string;
+    phone: string;
+    email?: string;
+  };
+  fulfillment: FulfillmentType;
+  address?: {
+    line: string;
+    reference?: string;
+    district: string;
+  };
+  scheduledDate?: string;
+  scheduledSlot?: string;
+  notes?: string;
+  items: OrderItem[];
+  subtotal: number;
+  discount: number;
+  deliveryFee: number;
+  total: number;
+  paymentMethod: PaymentMethod;
+  paymentProof?: PaymentProof;
+  status: OrderStatus;
+  history: OrderStatusEvent[];
+  createdAt: string;
+}
+
+export type MovementType = "entrada" | "venta" | "ajuste" | "merma" | "devolucion";
+
+export interface InventoryMovement {
+  id: string;
+  productId: string;
+  type: MovementType;
+  quantity: number; // positivo = ingresa stock, negativo = sale stock
+  note?: string;
+  batch?: string;
+  expiryDate?: string;
+  createdAt: string;
+  createdBy: string;
+}
+
+export interface Supplier {
+  id: string;
+  name: string;
+  ruc: string;
+  phone: string;
+  category: string;
+}
+
+export interface Purchase {
+  id: string;
+  supplierId: string;
+  items: { productId: string; quantity: number; unitCost: number }[];
+  total: number;
+  status: "pendiente" | "recibida";
+  createdAt: string;
+}
+
+export interface Customer {
+  id: string;
+  name: string;
+  phone: string;
+  email?: string;
+  district?: string;
+  ordersCount: number;
+  totalSpent: number;
+  createdAt: string;
+}
+
+export type UserRole = "administrador" | "cajero" | "almacen" | "repartidor";
+
+export interface StaffUser {
+  id: string;
+  name: string;
+  username: string;
+  password: string; // demo-only, texto plano intencional para propósitos de la demo
+  role: UserRole;
+  active: boolean;
+}
+
+export interface CashMovement {
+  id: string;
+  type: "ingreso" | "gasto" | "retiro";
+  concept: string;
+  amount: number;
+  createdAt: string;
+}
+
+export interface CashSession {
+  id: string;
+  openedAt: string;
+  closedAt?: string;
+  openingAmount: number;
+  closingAmount?: number;
+  movements: CashMovement[];
+  status: "abierta" | "cerrada";
+  openedBy: string;
+}
+
+export interface PaymentAccountConfig {
+  yape: { phone: string; holder: string };
+  plin: { phone: string; holder: string };
+  transferencia: { bank: string; accountNumber: string; cci: string; holder: string };
+}
+
+export interface DeliveryZone {
+  id: string;
+  district: string;
+  fee: number;
+  etaMinutes: number;
+}
+
+export interface StoreConfig {
+  freeDeliveryThreshold: number;
+  defaultDeliveryFee: number;
+  deliveryZones: DeliveryZone[];
+  openingHours: string;
+  paymentAccounts: PaymentAccountConfig;
+}

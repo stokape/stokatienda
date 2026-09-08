@@ -1,0 +1,50 @@
+import {
+  Bone,
+  Candy,
+  Carrot,
+  Coffee,
+  Cookie,
+  Croissant,
+  CupSoda,
+  Droplet,
+  Egg,
+  IceCreamCone,
+  Milk,
+  Package,
+  PawPrint,
+  Popcorn,
+  Salad,
+  ShoppingBasket,
+  Soup,
+  Sparkles,
+  SprayCan,
+  Wheat,
+  type LucideIcon,
+} from "lucide-react";
+
+export const iconRegistry: Record<string, LucideIcon> = {
+  ShoppingBasket,
+  CupSoda,
+  Popcorn,
+  Coffee,
+  Carrot,
+  SprayCan,
+  Sparkles,
+  PawPrint,
+  Wheat,
+  Droplet,
+  Candy,
+  Soup,
+  Cookie,
+  Package,
+  IceCreamCone,
+  Milk,
+  Croissant,
+  Egg,
+  Salad,
+  Bone,
+};
+
+export function getIcon(name: string): LucideIcon {
+  return iconRegistry[name] ?? Package;
+}

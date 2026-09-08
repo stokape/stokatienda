@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@theme {
+  /* Rajdhani: geométrica, técnica — sustituye a la wordmark metálica y a
+     Bank Gothic para titulares. Raleway: tipografía del eslogan de marca.
+     Plus Jakarta Sans: interfaz/cuerpo, se mantiene por legibilidad. */
+  --font-display: "Rajdhani", "Oswald", sans-serif;
+  --font-accent: "Raleway", "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+
+  /* Paleta de marca STOKA BODEGA: rojo, plata, negro. Los valores exactos
+     de la identidad; el resto de tokens (fondo/superficie/texto) son
+     semánticos y cambian entre tema claro y oscuro más abajo. */
+  --color-stoka-red: #e10613;
+  --color-stoka-red-dark: #b70b15;
+  --color-stoka-red-light: #ff4d4f;
+
+  --color-stoka-silver: #8e8e93;
+  --color-stoka-silver-light: #c5c5c7;
+
+  --color-stoka-black: #0d0d0f;
+  --color-stoka-carbon: #18181b;
+
+  --color-stoka-success: #1fa463;
+  --color-stoka-success-100: #dff5e8;
+  --color-stoka-warning: #d99d0e;
+  --color-stoka-warning-100: #fbedcc;
+  --color-stoka-info: #3a6df0;
+  --color-stoka-info-100: #dfe7fd;
+
+  /* --- Tokens semánticos (tema claro por defecto) --- */
+  --color-stoka-bg: #f5f5f6;
+  --color-stoka-bg-alt: #ececee;
+  --color-stoka-surface: #ffffff;
+  --color-stoka-surface-2: #f0f0f2;
+  --color-stoka-border: #dcdce0;
+  --color-stoka-border-strong: #b9b9be;
+  --color-stoka-ink: #0d0d0f;
+  --color-stoka-ink-muted: #66666b;
+  --color-stoka-red-100: #fbdadb;
+  --color-stoka-silver-100: #eceeef;
+
+  /* --- Alias de compatibilidad ---
+     Los componentes se escribieron contra estos nombres durante el primer
+     concepto de marca ("bodega de barrio"). En vez de reescribir cada
+     archivo, se re-apuntan aquí a los tokens semánticos nuevos, así todo
+     el sitio adopta la paleta roja/plata/negro y el tema oscuro de una
+     sola vez. Todo lo nuevo debería usar los tokens semánticos de arriba
+     directamente en vez de estos alias. */
+  --color-stoka-green-50: var(--color-stoka-silver-100);
+  --color-stoka-green-100: var(--color-stoka-red-100);
+  --color-stoka-green-200: var(--color-stoka-border-strong);
+  --color-stoka-green-300: var(--color-stoka-border-strong);
+  --color-stoka-green-400: var(--color-stoka-red);
+  --color-stoka-green-500: var(--color-stoka-red-dark);
+  --color-stoka-green-600: var(--color-stoka-red);
+  --color-stoka-green-700: var(--color-stoka-red);
+  --color-stoka-green-800: var(--color-stoka-ink);
+  --color-stoka-green-900: var(--color-stoka-ink);
+
+  --color-stoka-cream: var(--color-stoka-bg);
+  --color-stoka-cream-100: var(--color-stoka-surface-2);
+  --color-stoka-cream-200: var(--color-stoka-border);
+  --color-stoka-cream-300: var(--color-stoka-border-strong);
+
+  --color-stoka-coral: var(--color-stoka-red-dark);
+  --color-stoka-coral-dark: var(--color-stoka-red-dark);
+  --color-stoka-coral-100: var(--color-stoka-red-100);
+
+  --color-stoka-yellow: var(--color-stoka-silver-light);
+  --color-stoka-yellow-dark: var(--color-stoka-silver);
+  --color-stoka-yellow-100: var(--color-stoka-silver-100);
+
+  --color-stoka-blue: var(--color-stoka-info);
+  --color-stoka-blue-100: var(--color-stoka-info-100);
+
+  --shadow-card: 0 1px 2px rgb(13 13 15 / 0.06), 0 8px 20px -8px rgb(13 13 15 / 0.14);
+  --shadow-pop: 0 4px 10px rgb(13 13 15 / 0.1), 0 20px 40px -12px rgb(13 13 15 / 0.28);
+  --shadow-glow: 0 0 0 rgb(0 0 0 / 0);
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-slow: float 9s ease-in-out infinite;
+  --animate-in-up: in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-pop: pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-scan: scan 2.2s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -14px; }
+  }
+  @keyframes in-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes scan {
+    0%, 100% { top: 6%; }
+    50% { top: 92%; }
+  }
+}
+
+/* Tema oscuro: automático si el sistema lo pide (y el usuario no forzó
+   claro), o forzado con data-theme="dark". El toggle manual siempre gana. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-stoka-bg: #0d0d0f;
+    --color-stoka-bg-alt: #131316;
+    --color-stoka-surface: #18181b;
+    --color-stoka-surface-2: #202024;
+    --color-stoka-border: #2b2b30;
+    --color-stoka-border-strong: #3d3d43;
+    --color-stoka-ink: #f5f5f6;
+    --color-stoka-ink-muted: #9a9aa0;
+    --color-stoka-red: #ff3b3b;
+    --color-stoka-red-100: #3a1417;
+    --color-stoka-silver-100: #232326;
+    --color-stoka-success-100: #123322;
+    --color-stoka-warning-100: #3a2c0d;
+    --color-stoka-info-100: #16223f;
+
+    --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 24px -10px rgb(0 0 0 / 0.6);
+    --shadow-pop: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 24px 48px -16px rgb(0 0 0 / 0.75);
+    --shadow-glow: 0 0 0 1px rgb(225 6 19 / 0.4), 0 0 24px rgb(225 6 19 / 0.25);
+  }
+}
+:root[data-theme="dark"] {
+  --color-stoka-bg: #0d0d0f;
+  --color-stoka-bg-alt: #131316;
+  --color-stoka-surface: #18181b;
+  --color-stoka-surface-2: #202024;
+  --color-stoka-border: #2b2b30;
+  --color-stoka-border-strong: #3d3d43;
+  --color-stoka-ink: #f5f5f6;
+  --color-stoka-ink-muted: #9a9aa0;
+  --color-stoka-red: #ff3b3b;
+  --color-stoka-red-100: #3a1417;
+  --color-stoka-silver-100: #232326;
+  --color-stoka-success-100: #123322;
+  --color-stoka-warning-100: #3a2c0d;
+  --color-stoka-info-100: #16223f;
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 24px -10px rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 24px 48px -16px rgb(0 0 0 / 0.75);
+  --shadow-glow: 0 0 0 1px rgb(225 6 19 / 0.4), 0 0 24px rgb(225 6 19 / 0.25);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light dark;
+  }
+  body {
+    background-color: var(--color-stoka-bg);
+    color: var(--color-stoka-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-stoka-red);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  ::selection {
+    background: var(--color-stoka-red);
+    color: white;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Corte de faceta diagonal en una esquina + línea de acento plata→rojo:
+     el motivo de marca (facetas del isotipo) traducido a la UI. Elemento
+     de firma de esta identidad — se usa con moderación. */
+  .facet-corner {
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%);
+  }
+  .facet-corner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--color-stoka-silver-light), var(--color-stoka-red) 60%);
+    clip-path: polygon(calc(100% - 22px) 0, 100% 0, 100% 22px);
+    pointer-events: none;
+  }
+
+  /* Textura sutil tipo "malla metálica" para fondos de marca (hero, panel). */
+  .texture-mesh {
+    background-image: linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+}
