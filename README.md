@@ -1,4 +1,4 @@
-# STOKA BODEGA
+# Bodeguita Stoka
 
 **Tu tienda, más simple.**
 

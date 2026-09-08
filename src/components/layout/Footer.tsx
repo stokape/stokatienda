@@ -15,7 +15,7 @@ export function Footer() {
         <div>
           <div className="flex items-center gap-2.5">
             <BrandMark size={32} />
-            <p className="font-display text-xl font-bold text-white">STOKA BODEGA</p>
+            <p className="font-display text-xl font-bold text-white">Bodeguita Stoka</p>
           </div>
           <p className="mt-2 text-sm text-stoka-silver">Tu tienda, más simple.</p>
           <div className="mt-4 flex gap-3">
@@ -69,7 +69,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-stoka-silver">
-        © {new Date().getFullYear()} STOKA BODEGA — Demo funcional sin fines comerciales reales.
+        © {new Date().getFullYear()} Bodeguita Stoka — Demo funcional sin fines comerciales reales.
       </div>
     </footer>
   );

@@ -1,5 +1,5 @@
 /**
- * Isotipo de STOKA BODEGA adaptado a trazo plano: el pliegue diagonal
+ * Isotipo de Bodeguita Stoka adaptado a trazo plano: el pliegue diagonal
  * plata → rojo del isotipo original, con el carrito de compras al centro.
  * Es una aproximación (no el render 3D/cromado original) pensada para
  * verse bien también a tamaños chicos como favicon o ícono de barra.

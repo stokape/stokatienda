@@ -49,7 +49,7 @@ export function AdminLogin() {
       <div className="w-full max-w-sm rounded-xl border border-stoka-border bg-stoka-surface p-8 shadow-pop">
         <div className="mb-6 flex flex-col items-center text-center">
           <BrandMark size={56} />
-          <h1 className="mt-3 font-display text-xl font-bold text-stoka-ink">Panel STOKA BODEGA</h1>
+          <h1 className="mt-3 font-display text-xl font-bold text-stoka-ink">Panel Bodeguita Stoka</h1>
           <p className="text-sm text-stoka-ink-muted">Acceso exclusivo para el personal</p>
         </div>
 

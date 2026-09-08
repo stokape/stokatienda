@@ -19,13 +19,13 @@ export const defaultStoreConfig: StoreConfig = {
     { id: "z-independencia", district: "Independencia", fee: 5, etaMinutes: 25 },
   ],
   paymentAccounts: {
-    yape: { phone: "987 654 321", holder: "Stoka Bodega E.I.R.L." },
-    plin: { phone: "987 654 321", holder: "Stoka Bodega E.I.R.L." },
+    yape: { phone: "987 654 321", holder: "Bodeguita Stoka E.I.R.L." },
+    plin: { phone: "987 654 321", holder: "Bodeguita Stoka E.I.R.L." },
     transferencia: {
       bank: "BCP",
       accountNumber: "191-2345678-0-12",
       cci: "002-191-002345678012-34",
-      holder: "Stoka Bodega E.I.R.L. - RUC 20601234567",
+      holder: "Bodeguita Stoka E.I.R.L. - RUC 20601234567",
     },
   },
 };

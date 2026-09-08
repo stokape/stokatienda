@@ -43,10 +43,10 @@ export function Header() {
           <Menu className="size-6" aria-hidden="true" />
         </button>
 
-        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="STOKA BODEGA, ir al inicio">
+        <Link to="/" className="flex shrink-0 items-center gap-2.5" aria-label="Bodeguita Stoka, ir al inicio">
           <BrandMark size={38} />
-          <span className="font-display text-2xl font-bold tracking-tight text-stoka-ink">
-            STOKA
+          <span className="font-display text-xl font-bold tracking-tight whitespace-nowrap text-stoka-ink sm:text-2xl">
+            Bodeguita Stoka
           </span>
         </Link>
 

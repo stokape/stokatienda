@@ -6,7 +6,7 @@
 
 ---
 
-**Project:** Stoka Bodega
+**Project:** Bodeguita Stoka
 **Generated:** 2026-09-06 00:42:29
 **Category:** E-commerce
 

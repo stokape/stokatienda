@@ -64,7 +64,7 @@ export function AdminLayout() {
       <div className="mb-4 flex items-center justify-between px-2">
         <Link to="/" className="flex items-center gap-2">
           <BrandMark size={32} />
-          <span className="font-display text-lg font-bold text-stoka-ink">STOKA Admin</span>
+          <span className="font-display text-lg font-bold text-stoka-ink">Bodeguita Stoka</span>
         </Link>
         <ThemeToggle className="!size-9" />
       </div>
@@ -110,7 +110,7 @@ export function AdminLayout() {
         <button onClick={() => setMobileOpen(true)} aria-label="Abrir menú" className="cursor-pointer rounded-lg p-1.5 hover:bg-stoka-surface-2">
           <Menu className="size-6 text-stoka-ink" aria-hidden="true" />
         </button>
-        <span className="font-display font-bold text-stoka-ink">STOKA Admin</span>
+        <span className="font-display font-bold text-stoka-ink">Bodeguita Stoka</span>
         <ThemeToggle className="!size-9" />
       </div>
 

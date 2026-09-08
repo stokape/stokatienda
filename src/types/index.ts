@@ -1,4 +1,4 @@
-// Tipos centrales del dominio STOKA BODEGA.
+// Tipos centrales del dominio Bodeguita Stoka.
 // La capa de datos (src/data + src/store) implementa estas formas sobre
 // localStorage a modo de "backend simulado". Cuando se conecte un backend
 // real, solo hace falta reemplazar src/services/* sin tocar los tipos ni la UI.
