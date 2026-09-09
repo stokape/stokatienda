@@ -3,13 +3,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { categoryAccentOptions } from "../../data/categories";
 import { DataTable, type Column } from "../../components/admin/DataTable";
+import { CategoryPill } from "../../components/store/CategoryPill";
 import { ProductImage } from "../../components/store/ProductImage";
 import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { Checkbox, Field, Input, Select } from "../../components/ui/form";
 import { Modal } from "../../components/ui/Modal";
 import { Tabs } from "../../components/ui/Tabs";
-import { getIcon, iconRegistry } from "../../lib/icon-registry";
+import { iconLabels, iconRegistry } from "../../lib/icon-registry";
 import { useDataStore } from "../../store/dataStore";
 import type { Brand, Category, CategoryAccentColor } from "../../types";
 
@@ -240,12 +241,36 @@ export function CatalogSettingsPage() {
           <Field label="Nombre" htmlFor="cat-name" required>
             <Input id="cat-name" value={catForm.name} onChange={(e) => setCatForm({ ...catForm, name: e.target.value })} />
           </Field>
-          <Field label="Ícono" htmlFor="cat-icon">
-            <Select id="cat-icon" value={catForm.icon} onChange={(e) => setCatForm({ ...catForm, icon: e.target.value })}>
-              {Object.keys(iconRegistry).map((name) => (
-                <option key={name} value={name}>{name}</option>
-              ))}
-            </Select>
+          <Field label="Ícono" htmlFor="cat-icon-grid" hint="Elige uno de la lista — no se puede escribir uno libre.">
+            <div
+              id="cat-icon-grid"
+              role="radiogroup"
+              aria-label="Ícono de la categoría"
+              className="grid grid-cols-6 gap-2 rounded-lg border border-stoka-border bg-stoka-surface-2 p-2 sm:grid-cols-8"
+            >
+              {Object.entries(iconRegistry).map(([name, Icon]) => {
+                const selected = catForm.icon === name;
+                const label = iconLabels[name] ?? name;
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    aria-label={label}
+                    title={label}
+                    onClick={() => setCatForm({ ...catForm, icon: name })}
+                    className={`flex size-10 cursor-pointer items-center justify-center rounded-lg border transition-colors ${
+                      selected
+                        ? "border-stoka-red bg-stoka-red text-white shadow-card"
+                        : "border-transparent bg-stoka-surface text-stoka-ink hover:border-stoka-border-strong"
+                    }`}
+                  >
+                    <Icon className="size-5" aria-hidden="true" />
+                  </button>
+                );
+              })}
+            </div>
           </Field>
           <Field label="Color de acento" htmlFor="cat-color">
             <Select id="cat-color" value={catForm.color} onChange={(e) => setCatForm({ ...catForm, color: e.target.value as CategoryAccentColor })}>
@@ -254,12 +279,11 @@ export function CatalogSettingsPage() {
               ))}
             </Select>
           </Field>
-          <div className="flex items-center gap-3 rounded-lg border border-stoka-border bg-stoka-surface-2 p-3">
-            {(() => {
-              const Icon = getIcon(catForm.icon);
-              return <Icon className="size-6 text-stoka-ink" aria-hidden="true" />;
-            })()}
-            <span className="text-sm text-stoka-ink-muted">Vista previa del ícono</span>
+          <div>
+            <p className="mb-1.5 text-xs font-semibold text-stoka-ink-muted">Así se ve en la tienda</p>
+            <div className="pointer-events-none inline-block">
+              <CategoryPill category={{ slug: "preview", name: catForm.name || "Categoría", icon: catForm.icon, color: catForm.color, order: 0, active: true }} />
+            </div>
           </div>
           <Checkbox
             label="Visible en la tienda"
