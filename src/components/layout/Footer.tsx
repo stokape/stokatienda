@@ -46,9 +46,6 @@ export function Footer() {
           <p className="mb-3 text-sm font-semibold text-white">Ayuda</p>
           <ul className="space-y-2 text-sm text-stoka-silver">
             <li>
-              <Link to="/mis-pedidos" className="hover:text-white">Rastrear mi pedido</Link>
-            </li>
-            <li>
               <Link to="/catalogo" className="hover:text-white">Ver catálogo</Link>
             </li>
             <li>

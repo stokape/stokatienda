@@ -96,13 +96,6 @@ export function Header() {
           ))}
         </nav>
 
-        <Link
-          to="/mis-pedidos"
-          className="ml-1 hidden rounded-lg px-3 py-2 text-sm font-medium text-stoka-ink hover:bg-stoka-surface-2 sm:block"
-        >
-          Mis pedidos
-        </Link>
-
         <ThemeToggle className="ml-1 hidden sm:flex" />
 
         <button
@@ -165,9 +158,6 @@ export function Header() {
             </Link>
             <Link onClick={() => setMobileMenuOpen(false)} to="/catalogo" className="rounded-lg px-3 py-2.5 font-medium text-stoka-ink hover:bg-stoka-surface-2">
               Catálogo
-            </Link>
-            <Link onClick={() => setMobileMenuOpen(false)} to="/mis-pedidos" className="rounded-lg px-3 py-2.5 font-medium text-stoka-ink hover:bg-stoka-surface-2">
-              Mis pedidos
             </Link>
             <hr className="my-2 border-stoka-border" />
             <Link onClick={() => setMobileMenuOpen(false)} to="/admin/login" className="rounded-lg px-3 py-2.5 text-sm text-stoka-ink-muted hover:bg-stoka-surface-2">

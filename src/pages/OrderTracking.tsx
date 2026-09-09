@@ -53,8 +53,8 @@ export function OrderTracking() {
           title="No encontramos ese pedido"
           description="Verifica el código e intenta nuevamente."
           action={
-            <Link to="/mis-pedidos" className="font-semibold text-stoka-green-700 underline">
-              Buscar mi pedido
+            <Link to="/" className="font-semibold text-stoka-green-700 underline">
+              Volver al inicio
             </Link>
           }
         />

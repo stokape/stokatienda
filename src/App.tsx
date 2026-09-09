@@ -7,7 +7,6 @@ import { useResolvedTheme } from "./store/themeStore";
 import { Catalog } from "./pages/Catalog";
 import { Checkout } from "./pages/Checkout";
 import { Home } from "./pages/Home";
-import { MyOrders } from "./pages/MyOrders";
 import { NotFound } from "./pages/NotFound";
 import { OrderTracking } from "./pages/OrderTracking";
 import { ProductDetail } from "./pages/ProductDetail";
@@ -52,7 +51,6 @@ export default function App() {
           <Route path="producto/:slug" element={<ProductDetail />} />
           <Route path="checkout" element={<Checkout />} />
           <Route path="pedido/:code" element={<OrderTracking />} />
-          <Route path="mis-pedidos" element={<MyOrders />} />
         </Route>
 
         <Route
