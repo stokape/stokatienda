@@ -11,6 +11,7 @@ import { orders as seedOrders } from "../data/orders";
 import { products as seedProducts } from "../data/products";
 import { defaultSiteContent } from "../data/siteContent";
 import { purchases as seedPurchases, suppliers as seedSuppliers } from "../data/suppliers";
+import { suggestions as seedSuggestions } from "../data/suggestions";
 import { staffUsers as seedUsers } from "../data/users";
 import { generateId, nextOrderCode } from "../lib/id";
 import type {
@@ -29,6 +30,7 @@ import type {
   SiteContent,
   StaffUser,
   StoreConfig,
+  Suggestion,
   Supplier,
 } from "../types";
 
@@ -54,6 +56,7 @@ interface DataState {
   customers: Customer[];
   staffUsers: StaffUser[];
   cashSessions: CashSession[];
+  suggestions: Suggestion[];
   config: StoreConfig;
 
   // Productos
@@ -108,6 +111,11 @@ interface DataState {
   addCashMovement: (m: Omit<CashMovement, "id" | "createdAt">) => void;
   closeCashSession: (closingAmount: number) => void;
 
+  // Sugerencias de clientes (widget flotante de la tienda)
+  addSuggestion: (s: Omit<Suggestion, "id" | "status" | "createdAt">) => void;
+  updateSuggestionStatus: (id: string, status: Suggestion["status"]) => void;
+  deleteSuggestion: (id: string) => void;
+
   // Configuración
   updateConfig: (patch: Partial<StoreConfig>) => void;
 }
@@ -127,6 +135,7 @@ export const useDataStore = create<DataState>()(
       customers: seedCustomers,
       staffUsers: seedUsers,
       cashSessions: seedCashSessions,
+      suggestions: seedSuggestions,
       config: defaultStoreConfig,
 
       addProduct: (p) =>
@@ -368,6 +377,20 @@ export const useDataStore = create<DataState>()(
             ],
           };
         }),
+
+      addSuggestion: (s) =>
+        set((state) => ({
+          suggestions: [
+            { ...s, id: generateId("sg"), status: "nueva", createdAt: new Date().toISOString() },
+            ...state.suggestions,
+          ],
+        })),
+      updateSuggestionStatus: (id, status) =>
+        set((state) => ({
+          suggestions: state.suggestions.map((s) => (s.id === id ? { ...s, status } : s)),
+        })),
+      deleteSuggestion: (id) =>
+        set((state) => ({ suggestions: state.suggestions.filter((s) => s.id !== id) })),
 
       updateConfig: (patch) => set((state) => ({ config: { ...state.config, ...patch } })),
     }),

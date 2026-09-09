@@ -173,6 +173,18 @@ export interface Customer {
   createdAt: string;
 }
 
+// Sugerencia enviada por un cliente desde el widget flotante de la tienda
+// pública (qué producto le gustaría encontrar, qué le falta, etc.) — nombre
+// y celular son opcionales, así que puede llegar totalmente anónima.
+export interface Suggestion {
+  id: string;
+  message: string;
+  name?: string;
+  phone?: string;
+  status: "nueva" | "revisada";
+  createdAt: string;
+}
+
 export type UserRole = "administrador" | "cajero" | "almacen" | "repartidor";
 
 export interface StaffUser {

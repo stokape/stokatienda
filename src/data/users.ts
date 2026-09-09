@@ -19,7 +19,7 @@ export const roleLabels: Record<string, string> = {
 export const roleAccess: Record<string, string[]> = {
   administrador: [
     "dashboard", "venta-rapida", "productos", "catalogo", "inventario", "pedidos", "pagos",
-    "caja", "clientes", "proveedores", "usuarios", "reportes", "configuracion", "contenido", "mantenimiento",
+    "caja", "clientes", "proveedores", "usuarios", "reportes", "sugerencias", "configuracion", "contenido", "mantenimiento",
   ],
   cajero: ["dashboard", "venta-rapida", "pedidos", "pagos", "caja", "clientes"],
   almacen: ["dashboard", "productos", "inventario", "proveedores"],

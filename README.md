@@ -31,7 +31,7 @@ Credenciales de demostración (también visibles en la propia pantalla de login)
 
 | Rol | Usuario | Contraseña | Acceso |
 |---|---|---|---|
-| Administrador | `admin` | `admin123` | Todo el panel: venta rápida, productos, inventario, pedidos, validar pagos, caja, clientes, proveedores, **usuarios/roles**, reportes, configuración |
+| Administrador | `admin` | `admin123` | Todo el panel: venta rápida, productos, inventario, pedidos, validar pagos, caja, clientes, proveedores, **usuarios/roles**, reportes, sugerencias, configuración |
 | Cajero | `cajero` | `cajero123` | Dashboard, venta rápida, pedidos, validar pagos, caja, clientes |
 | Almacén | `almacen` | `almacen123` | Dashboard, productos, inventario (incluye escaneo de código de barras), proveedores |
 | Repartidor | `repartidor` | `reparto123` | Dashboard, pedidos (actualiza estado de entrega) |
@@ -61,6 +61,14 @@ leer el código de barras de un producto físico:
   ingresar el código a mano — el flujo nunca se bloquea por falta de cámara.
 - Funciona desde cualquier dispositivo con cámara y navegador (celular incluido), ya que usa
   la cámara del propio navegador — no requiere una app nativa.
+
+## Sugerencias de clientes
+
+Un botón flotante ("¿Qué te falta?") visible en toda la tienda pública abre un formulario
+corto para que cualquier cliente sugiera un producto que le gustaría encontrar, o cualquier
+otra idea — nombre y celular son opcionales, así que puede mandarse anónima. Cada envío queda
+guardado en `/admin/sugerencias` (solo Administrador), donde se puede marcar como revisada o
+eliminar; el Dashboard muestra cuántas quedan sin revisar.
 
 ## Venta rápida (mostrador)
 

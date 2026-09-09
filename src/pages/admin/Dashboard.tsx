@@ -1,4 +1,4 @@
-import { AlertTriangle, Boxes, CalendarClock, ReceiptText, TrendingUp, Wallet } from "lucide-react";
+import { AlertTriangle, Boxes, CalendarClock, Lightbulb, ReceiptText, TrendingUp, Wallet } from "lucide-react";
 import { useMemo } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
@@ -13,6 +13,8 @@ export function Dashboard() {
   const orders = useDataStore((s) => s.orders);
   const products = useDataStore((s) => s.products);
   const categories = useDataStore((s) => s.categories);
+  const suggestions = useDataStore((s) => s.suggestions);
+  const newSuggestions = suggestions.filter((s) => s.status === "nueva").length;
 
   const stats = useMemo(() => {
     const today = new Date().toDateString();
@@ -76,24 +78,26 @@ export function Dashboard() {
       <h1 className="mb-1 font-display text-2xl font-bold text-stoka-green-900">Dashboard</h1>
       <p className="mb-6 text-sm text-slate-500">Resumen del rendimiento de la tienda.</p>
 
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         <StatCard icon={TrendingUp} label="Ventas de hoy" value={formatCurrency(stats.ventasHoy)} tone="green" />
         <StatCard icon={ReceiptText} label="Pedidos activos" value={String(stats.pendientes)} tone="blue" />
         <StatCard icon={Wallet} label="Utilidad estimada" value={formatCurrency(stats.utilidad)} tone="yellow" />
         <StatCard icon={Boxes} label="Stock bajo" value={String(stats.lowStock)} tone="coral" hint={`${stats.outOfStock} agotados`} />
         <StatCard icon={CalendarClock} label="Pagos por validar" value={String(stats.reviewCount)} tone="red" />
+        <StatCard icon={Lightbulb} label="Sugerencias nuevas" value={String(newSuggestions)} tone="blue" />
       </div>
 
-      {(stats.lowStock > 0 || stats.outOfStock > 0 || stats.reviewCount > 0) && (
+      {(stats.lowStock > 0 || stats.outOfStock > 0 || stats.reviewCount > 0 || newSuggestions > 0) && (
         <div className="mt-6 flex flex-wrap items-center gap-3 rounded-xl border border-stoka-warning/40 bg-stoka-warning-100 p-4 text-sm text-stoka-warning">
           <AlertTriangle className="size-5 shrink-0" aria-hidden="true" />
           <span>
-            Tienes {stats.lowStock} productos con poco stock, {stats.outOfStock} agotados y {stats.reviewCount} pagos
-            esperando validación.
+            Tienes {stats.lowStock} productos con poco stock, {stats.outOfStock} agotados, {stats.reviewCount} pagos
+            esperando validación y {newSuggestions} sugerencia{newSuggestions === 1 ? "" : "s"} sin revisar.
           </span>
           <div className="ml-auto flex gap-2">
             <Link to="/admin/inventario" className="font-semibold underline">Ver inventario</Link>
             <Link to="/admin/pagos" className="font-semibold underline">Ver pagos</Link>
+            <Link to="/admin/sugerencias" className="font-semibold underline">Ver sugerencias</Link>
           </div>
         </div>
       )}

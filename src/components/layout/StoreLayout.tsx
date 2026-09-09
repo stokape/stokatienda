@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { useMaintenanceActive } from "../../lib/maintenance";
 import { Maintenance } from "../../pages/Maintenance";
+import { SuggestionWidget } from "../store/SuggestionWidget";
 import { CartDrawer } from "./CartDrawer";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
@@ -25,6 +26,7 @@ export function StoreLayout() {
       </main>
       <Footer />
       <CartDrawer />
+      <SuggestionWidget />
     </div>
   );
 }

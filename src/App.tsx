@@ -27,6 +27,7 @@ const CustomersPage = lazy(() => import("./pages/admin/CustomersPage").then((m) 
 const SuppliersPage = lazy(() => import("./pages/admin/SuppliersPage").then((m) => ({ default: m.SuppliersPage })));
 const UsersPage = lazy(() => import("./pages/admin/UsersPage").then((m) => ({ default: m.UsersPage })));
 const ReportsPage = lazy(() => import("./pages/admin/ReportsPage").then((m) => ({ default: m.ReportsPage })));
+const SuggestionsPage = lazy(() => import("./pages/admin/SuggestionsPage").then((m) => ({ default: m.SuggestionsPage })));
 const SettingsPage = lazy(() => import("./pages/admin/SettingsPage").then((m) => ({ default: m.SettingsPage })));
 const ContentPage = lazy(() => import("./pages/admin/ContentPage").then((m) => ({ default: m.ContentPage })));
 const MaintenanceSettingsPage = lazy(() => import("./pages/admin/MaintenanceSettingsPage").then((m) => ({ default: m.MaintenanceSettingsPage })));
@@ -81,6 +82,7 @@ export default function App() {
           <Route path="proveedores" element={<SuppliersPage />} />
           <Route path="usuarios" element={<UsersPage />} />
           <Route path="reportes" element={<ReportsPage />} />
+          <Route path="sugerencias" element={<SuggestionsPage />} />
           <Route path="contenido" element={<ContentPage />} />
           <Route path="mantenimiento" element={<MaintenanceSettingsPage />} />
           <Route path="configuracion" element={<SettingsPage />} />
