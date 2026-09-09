@@ -260,4 +260,10 @@ export interface MaintenanceConfig {
   // no empieza, para que el cliente no se sorprenda cuando llegue la hora.
   noticeEnabled: boolean;
   noticeMessage: string;
+  // Personalización de la pantalla de mantenimiento en sí:
+  backgroundImage: string; // data URL de la imagen subida, "" = sin imagen (fondo liso)
+  showLogo: boolean; // mantener el isotipo de la marca visible
+  showContactPhone: boolean;
+  contactPhone: string;
+  showReturnTime: boolean; // mostrar "Volvemos aprox. el..." cuando hay fecha de fin programada
 }

@@ -119,7 +119,10 @@ Desde `/admin` (rol Administrador, salvo que se indique otro) se puede editar en
   entrar a apagarlo. Si hay una ventana programada que todavía no empieza, aparece además una
   **franja de aviso previo** (mensaje editable, con la fecha calculada automáticamente) en toda
   la tienda para que el cliente no se sorprenda — se puede cerrar, y se vuelve a mostrar si se
-  reprograma la fecha.
+  reprograma la fecha. La pantalla de mantenimiento en sí también es personalizable, con vista
+  previa en vivo: **imagen de fondo** (se sube como archivo, máx. 1.5 MB, se guarda como data
+  URL), mantener u ocultar el **logo**, mostrar u ocultar el **teléfono de contacto** (editable)
+  y mostrar u ocultar la **hora estimada de regreso** cuando hay una fecha "Hasta" programada.
 - Todo lo demás documentado en la tabla de roles más abajo (productos, inventario, pedidos,
   pagos, caja, clientes, proveedores, usuarios, reportes, config de delivery/pagos).
 

@@ -1,5 +1,5 @@
-import { AlertTriangle, CalendarClock, CheckCircle2, Save } from "lucide-react";
-import { useState } from "react";
+import { AlertTriangle, CalendarClock, CheckCircle2, ImageUp, Save, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { formatScheduled } from "../../components/layout/MaintenanceNoticeBanner";
 import { MaintenanceContent } from "../../components/store/MaintenanceContent";
@@ -9,10 +9,13 @@ import { isMaintenanceActive, isUpcomingNoticeVisible } from "../../lib/maintena
 import { useDataStore } from "../../store/dataStore";
 import type { MaintenanceConfig } from "../../types";
 
+const MAX_IMAGE_BYTES = 1.5 * 1024 * 1024; // guarda la imagen como data URL en localStorage, sin backend real
+
 export function MaintenanceSettingsPage() {
   const maintenance = useDataStore((s) => s.maintenance);
   const updateMaintenance = useDataStore((s) => s.updateMaintenance);
   const [draft, setDraft] = useState<MaintenanceConfig>(maintenance);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const dirty = JSON.stringify(draft) !== JSON.stringify(maintenance);
   const currentlyActive = isMaintenanceActive(maintenance);
@@ -20,6 +23,24 @@ export function MaintenanceSettingsPage() {
 
   function set<K extends keyof MaintenanceConfig>(key: K, value: MaintenanceConfig[K]) {
     setDraft((d) => ({ ...d, [key]: value }));
+  }
+
+  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Elige un archivo de imagen (JPG, PNG, WEBP…).");
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      toast.error("La imagen es muy pesada.", { description: "Usa una de menos de 1.5 MB para que cargue rápido." });
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => set("backgroundImage", reader.result as string);
+    reader.onerror = () => toast.error("No se pudo leer la imagen.");
+    reader.readAsDataURL(file);
   }
 
   function handleSave(e: React.FormEvent) {
@@ -104,6 +125,79 @@ export function MaintenanceSettingsPage() {
             <Textarea id="m-message" value={draft.message} onChange={(e) => set("message", e.target.value)} />
           </Field>
 
+          <hr className="border-stoka-border" />
+
+          <div>
+            <p className="mb-2 text-sm font-semibold text-stoka-ink">Apariencia de la pantalla</p>
+            <p className="mb-3 -mt-1 text-xs text-stoka-ink-muted">
+              Qué se ve además del mensaje: imagen de fondo, logo y datos de contacto.
+            </p>
+
+            <Field label="Imagen de fondo" htmlFor="m-bg-file" hint="Opcional. JPG/PNG/WEBP, máx. 1.5 MB.">
+              <input
+                ref={fileInputRef}
+                id="m-bg-file"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageSelect}
+              />
+              {draft.backgroundImage ? (
+                <div className="flex items-center gap-3">
+                  <img
+                    src={draft.backgroundImage}
+                    alt="Fondo elegido para la pantalla de mantenimiento"
+                    className="size-16 shrink-0 rounded-lg border border-stoka-border object-cover"
+                  />
+                  <div className="flex flex-1 flex-col gap-2 sm:flex-row">
+                    <Button type="button" variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                      Cambiar
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      icon={<Trash2 className="size-4" aria-hidden="true" />}
+                      onClick={() => set("backgroundImage", "")}
+                    >
+                      Quitar
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex w-full cursor-pointer items-center gap-2 rounded-lg border-2 border-dashed border-stoka-border bg-stoka-surface px-4 py-2.5 text-sm text-stoka-ink-muted hover:border-stoka-red-400"
+                >
+                  <ImageUp className="size-4 shrink-0" aria-hidden="true" />
+                  Subir imagen de fondo…
+                </button>
+              )}
+            </Field>
+
+            <div className="mt-4 flex flex-col gap-3">
+              <Checkbox label="Mantener el logo visible" checked={draft.showLogo} onChange={(e) => set("showLogo", e.target.checked)} />
+
+              <Checkbox
+                label="Mostrar teléfono de contacto"
+                checked={draft.showContactPhone}
+                onChange={(e) => set("showContactPhone", e.target.checked)}
+              />
+              {draft.showContactPhone && (
+                <Field label="Teléfono a mostrar" htmlFor="m-phone">
+                  <Input id="m-phone" value={draft.contactPhone} onChange={(e) => set("contactPhone", e.target.value)} />
+                </Field>
+              )}
+
+              <Checkbox
+                label='Mostrar hora estimada de regreso (si hay fecha "Hasta" programada)'
+                checked={draft.showReturnTime}
+                onChange={(e) => set("showReturnTime", e.target.checked)}
+              />
+            </div>
+          </div>
+
           <Button type="submit" size="lg" disabled={!dirty} icon={<Save className="size-4" aria-hidden="true" />}>
             {dirty ? "Guardar cambios" : "Sin cambios por guardar"}
           </Button>
@@ -128,7 +222,15 @@ export function MaintenanceSettingsPage() {
             Vista previa de lo que verían los clientes {draftWouldBeActive ? "" : "(actualmente no se mostraría)"}
           </p>
           <div className="overflow-hidden rounded-xl border border-stoka-border">
-            <MaintenanceContent message={draft.message} endAt={draft.scheduled ? draft.endAt : undefined} />
+            <MaintenanceContent
+              message={draft.message}
+              endAt={draft.scheduled ? draft.endAt : undefined}
+              backgroundImage={draft.backgroundImage}
+              showLogo={draft.showLogo}
+              showContactPhone={draft.showContactPhone}
+              contactPhone={draft.contactPhone}
+              showReturnTime={draft.showReturnTime}
+            />
           </div>
         </div>
       </form>

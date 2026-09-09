@@ -8,4 +8,9 @@ export const defaultMaintenanceConfig: MaintenanceConfig = {
   message: "Estamos actualizando la tienda para atenderte mejor. Volvemos en breve — gracias por tu paciencia.",
   noticeEnabled: true,
   noticeMessage: "Tendremos mantenimiento programado — la tienda no estará disponible durante ese lapso.",
+  backgroundImage: "",
+  showLogo: true,
+  showContactPhone: true,
+  contactPhone: "987 654 321",
+  showReturnTime: true,
 };
