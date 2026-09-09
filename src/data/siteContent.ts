@@ -4,11 +4,11 @@ import type { SiteContent } from "../types";
 // recojo en tienda (sin delivery) — todo esto sigue siendo editable desde
 // /admin/contenido sin tocar código.
 export const defaultSiteContent: SiteContent = {
-  heroBadge: "Pide online, recógelo tú mismo en tienda",
-  heroTitleLine: "Tu tienda,",
-  heroTitleAccent: "más simple.",
+  heroBadge: "Tu bodega de siempre, ahora online",
+  heroTitleLine: "Tu antojo llegó",
+  heroTitleAccent: "antes que tú.",
   heroSubtitle:
-    "Tu bodega de confianza, ahora también online. Abarrotes, bebidas, frescos y más, listos para recoger cuando quieras.",
+    "Snacks, bebidas y todo lo que necesitas para ese momento. Elige online y recógelo listo en Bodeguita Stoka.",
   heroPrimaryCta: "Comprar ahora",
   heroSecondaryCta: "Ver ofertas",
   heroBenefit1: "Recojo rápido en tienda",
