@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { brands as seedBrands } from "../data/brands";
 import { cashSessions as seedCashSessions } from "../data/cash";
 import { categories as seedCategories } from "../data/categories";
+import { combos as seedCombos } from "../data/combos";
 import { defaultStoreConfig } from "../data/config";
 import { customers as seedCustomers } from "../data/customers";
 import { inventoryMovements as seedMovements } from "../data/inventory";
@@ -19,6 +20,7 @@ import type {
   CashMovement,
   CashSession,
   Category,
+  Combo,
   Customer,
   InventoryMovement,
   MaintenanceConfig,
@@ -47,6 +49,7 @@ interface DataState {
   products: Product[];
   brands: Brand[];
   categories: Category[];
+  combos: Combo[];
   siteContent: SiteContent;
   maintenance: MaintenanceConfig;
   orders: Order[];
@@ -74,6 +77,11 @@ interface DataState {
   updateCategory: (slug: string, patch: Partial<Category>) => void;
   deleteCategory: (slug: string) => void;
   reorderCategories: (orderedSlugs: string[]) => void;
+
+  // Combos (promociones entre productos)
+  addCombo: (c: Omit<Combo, "id" | "createdAt">) => void;
+  updateCombo: (id: string, patch: Partial<Combo>) => void;
+  deleteCombo: (id: string) => void;
 
   // Contenido de la portada
   updateSiteContent: (patch: Partial<SiteContent>) => void;
@@ -126,6 +134,7 @@ export const useDataStore = create<DataState>()(
       products: seedProducts,
       brands: seedBrands,
       categories: seedCategories,
+      combos: seedCombos,
       siteContent: defaultSiteContent,
       maintenance: defaultMaintenanceConfig,
       orders: seedOrders,
@@ -183,6 +192,15 @@ export const useDataStore = create<DataState>()(
             return idx === -1 ? c : { ...c, order: idx + 1 };
           }),
         })),
+
+      addCombo: (c) =>
+        set((state) => ({
+          combos: [...state.combos, { ...c, id: generateId("combo"), createdAt: new Date().toISOString() }],
+        })),
+      updateCombo: (id, patch) =>
+        set((state) => ({ combos: state.combos.map((c) => (c.id === id ? { ...c, ...patch } : c)) })),
+      deleteCombo: (id) =>
+        set((state) => ({ combos: state.combos.filter((c) => c.id !== id) })),
 
       updateSiteContent: (patch) =>
         set((state) => ({ siteContent: { ...state.siteContent, ...patch } })),

@@ -138,6 +138,12 @@ export function CartDrawer() {
                     <span>-{formatCurrency(summary.savings)}</span>
                   </div>
                 )}
+                {summary.appliedCombos.map(({ combo, times, discountPerApplication }) => (
+                  <div key={combo.id} className="flex justify-between text-stoka-success">
+                    <span>🎁 {combo.name}{times > 1 ? ` ×${times}` : ""}</span>
+                    <span>-{formatCurrency(discountPerApplication * times)}</span>
+                  </div>
+                ))}
                 {deliveryEnabled && (
                   <div className="flex justify-between text-slate-500">
                     <span>Delivery estimado</span>

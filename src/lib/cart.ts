@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { computeComboDiscount, type AppliedCombo } from "./combos";
 import { useCartStore } from "../store/cartStore";
 import { useDataStore } from "../store/dataStore";
 import type { Product } from "../types";
@@ -14,6 +15,8 @@ export interface CartSummary {
   itemCount: number;
   subtotal: number;
   savings: number;
+  appliedCombos: AppliedCombo[];
+  comboDiscount: number;
   deliveryFee: number;
   freeDeliveryThreshold: number;
   amountToFreeDelivery: number;
@@ -23,6 +26,7 @@ export interface CartSummary {
 export function useCartSummary(fulfillment: "delivery" | "recojo" = "delivery"): CartSummary {
   const cartLines = useCartStore((s) => s.lines);
   const products = useDataStore((s) => s.products);
+  const combos = useDataStore((s) => s.combos);
   const config = useDataStore((s) => s.config);
 
   return useMemo(() => {
@@ -40,6 +44,7 @@ export function useCartSummary(fulfillment: "delivery" | "recojo" = "delivery"):
       const compareAt = l.product.compareAtPrice;
       return compareAt ? acc + (compareAt - l.product.price) * l.quantity : acc;
     }, 0);
+    const { applied: appliedCombos, totalDiscount: comboDiscount } = computeComboDiscount(cartLines, products, combos);
 
     const freeDeliveryThreshold = config.freeDeliveryThreshold;
     const deliveryFee =
@@ -53,10 +58,12 @@ export function useCartSummary(fulfillment: "delivery" | "recojo" = "delivery"):
       itemCount,
       subtotal,
       savings,
+      appliedCombos,
+      comboDiscount,
       deliveryFee,
       freeDeliveryThreshold,
       amountToFreeDelivery,
-      total: subtotal + deliveryFee,
+      total: subtotal + deliveryFee - comboDiscount,
     };
-  }, [cartLines, products, config, fulfillment]);
+  }, [cartLines, products, combos, config, fulfillment]);
 }

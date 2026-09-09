@@ -18,6 +18,7 @@ const AdminLogin = lazy(() => import("./pages/admin/Login").then((m) => ({ defau
 const Dashboard = lazy(() => import("./pages/admin/Dashboard").then((m) => ({ default: m.Dashboard })));
 const ProductsPage = lazy(() => import("./pages/admin/ProductsPage").then((m) => ({ default: m.ProductsPage })));
 const CatalogSettingsPage = lazy(() => import("./pages/admin/CatalogSettingsPage").then((m) => ({ default: m.CatalogSettingsPage })));
+const CombosPage = lazy(() => import("./pages/admin/CombosPage").then((m) => ({ default: m.CombosPage })));
 const InventoryPage = lazy(() => import("./pages/admin/InventoryPage").then((m) => ({ default: m.InventoryPage })));
 const QuickSalePage = lazy(() => import("./pages/admin/QuickSalePage").then((m) => ({ default: m.QuickSalePage })));
 const OrdersPage = lazy(() => import("./pages/admin/OrdersPage").then((m) => ({ default: m.OrdersPage })));
@@ -74,6 +75,7 @@ export default function App() {
           <Route path="venta-rapida" element={<QuickSalePage />} />
           <Route path="productos" element={<ProductsPage />} />
           <Route path="catalogo" element={<CatalogSettingsPage />} />
+          <Route path="combos" element={<CombosPage />} />
           <Route path="inventario" element={<InventoryPage />} />
           <Route path="pedidos" element={<OrdersPage />} />
           <Route path="pagos" element={<PaymentsPage />} />

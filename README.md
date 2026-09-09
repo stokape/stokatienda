@@ -31,7 +31,7 @@ Credenciales de demostración (también visibles en la propia pantalla de login)
 
 | Rol | Usuario | Contraseña | Acceso |
 |---|---|---|---|
-| Administrador | `admin` | `admin123` | Todo el panel: venta rápida, productos, inventario, pedidos, validar pagos, caja, clientes, proveedores, **usuarios/roles**, reportes, sugerencias, configuración |
+| Administrador | `admin` | `admin123` | Todo el panel: venta rápida, productos, inventario, pedidos, validar pagos, caja, clientes, proveedores, **usuarios/roles**, reportes, sugerencias, combos, configuración |
 | Cajero | `cajero` | `cajero123` | Dashboard, venta rápida, pedidos, validar pagos, caja, clientes |
 | Almacén | `almacen` | `almacen123` | Dashboard, productos, inventario (incluye escaneo de código de barras), proveedores |
 | Repartidor | `repartidor` | `reparto123` | Dashboard, pedidos (actualiza estado de entrega) |
@@ -94,9 +94,25 @@ apagado: el checkout no ofrece la opción de delivery ni pide dirección/distrit
 ficha de producto) se ajusta sola a recojo. Actívalo el día que empiecen a repartir a
 domicilio — toda la lógica de zonas, tarifas y delivery gratis ya existe, solo estaba oculta.
 
-Los **descuentos siguen siendo la única palanca de precio**, y son 100% manuales por
-producto: el admin define el precio de venta y, opcionalmente, un "precio tachado" (oferta)
-en Productos — no hay cupones ni descuentos automáticos por ahora.
+Los descuentos por producto son 100% manuales: el admin define el precio de venta y,
+opcionalmente, un "precio tachado" (oferta) en Productos — no hay cupones. La otra palanca
+de precio son los **combos** (ver siguiente sección), que sí se aplican solos.
+
+## Combos (promociones entre productos)
+
+Desde `/admin/combos` (solo Administrador) se arman promociones que combinan **2 o más
+productos distintos** a un precio especial — por ejemplo "Pan + Leche + Café por S/18.90" en
+vez de comprarlos por separado. El admin elige los productos y el precio combinado; el panel
+valida que sea menor a la suma actual y muestra el ahorro resultante.
+
+En la tienda pública aparecen en una sección "Combos especiales" en la portada, con un botón
+que agrega todos sus productos al carrito de una vez. El descuento **se detecta solo** en
+cuanto el carrito tiene esas unidades — no hace falta ningún código: se ve como una línea
+"🎁 Nombre del combo" en el carrito, el checkout y la confirmación del pedido, y se resta del
+total real que se cobra (a diferencia del "Ahorro" por precio tachado, que es solo
+informativo porque ya está reflejado en el precio de cada producto). Si el mismo producto
+está en dos combos activos a la vez, esta primera versión no reparte las unidades entre
+ambos — evalúa cada combo por separado contra las cantidades totales del carrito.
 
 ## Costo de compra y margen de ganancia
 

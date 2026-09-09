@@ -63,6 +63,11 @@ export function OrderTracking() {
   }
 
   const PaymentIcon = paymentIcons[order.paymentMethod];
+  // Descuento real (p. ej. por un combo) — se calcula así, y no leyendo
+  // order.discount directo, porque ese campo es solo informativo (compara
+  // contra el precio tachado, que ya está reflejado en subtotal); esta
+  // resta sí cuadra siempre con lo que realmente se cobró.
+  const realDiscount = order.subtotal + order.deliveryFee - order.total;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
@@ -133,9 +138,27 @@ export function OrderTracking() {
                 </li>
               ))}
             </ul>
-            <div className="mt-3 flex justify-between border-t border-stoka-cream-200 pt-3 text-base font-bold text-stoka-green-900">
-              <span>Total</span>
-              <span>{formatCurrency(order.total)}</span>
+            <div className="mt-3 space-y-1 border-t border-stoka-cream-200 pt-3 text-sm">
+              <div className="flex justify-between text-slate-500">
+                <span>Subtotal</span>
+                <span>{formatCurrency(order.subtotal)}</span>
+              </div>
+              {realDiscount > 0 && (
+                <div className="flex justify-between text-stoka-success">
+                  <span>Descuento por combo</span>
+                  <span>-{formatCurrency(realDiscount)}</span>
+                </div>
+              )}
+              {order.deliveryFee > 0 && (
+                <div className="flex justify-between text-slate-500">
+                  <span>Delivery</span>
+                  <span>{formatCurrency(order.deliveryFee)}</span>
+                </div>
+              )}
+              <div className="flex justify-between pt-1 text-base font-bold text-stoka-green-900">
+                <span>Total</span>
+                <span>{formatCurrency(order.total)}</span>
+              </div>
             </div>
           </div>
         </div>

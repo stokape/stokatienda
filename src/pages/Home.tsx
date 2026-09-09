@@ -1,17 +1,31 @@
-import { ArrowRight, Banknote, Landmark, ShieldCheck, Smartphone, Store, Truck } from "lucide-react";
+import { ArrowRight, Banknote, Gift, Landmark, ShieldCheck, Smartphone, Store, Truck } from "lucide-react";
+import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { visibleCategories } from "../lib/categories";
+import { formatCurrency } from "../lib/format";
 import { Hero } from "../components/store/Hero";
 import { CategoryPill } from "../components/store/CategoryPill";
 import { ProductCard } from "../components/store/ProductCard";
+import { ProductImage } from "../components/store/ProductImage";
+import { Button } from "../components/ui/Button";
+import { useCartStore } from "../store/cartStore";
 import { useDataStore } from "../store/dataStore";
 
 export function Home() {
   const products = useDataStore((s) => s.products);
   const categories = visibleCategories(useDataStore((s) => s.categories));
+  const combos = useDataStore((s) => s.combos).filter((c) => c.active);
   const deliveryEnabled = useDataStore((s) => s.config.deliveryEnabled);
+  const addItem = useCartStore((s) => s.addItem);
+  const openCart = useCartStore((s) => s.open);
   const featured = products.filter((p) => p.featured).slice(0, 8);
   const offers = products.filter((p) => p.compareAtPrice).slice(0, 4);
+
+  function addComboToCart(comboName: string, productIds: string[]) {
+    productIds.forEach((id) => addItem(id, 1));
+    toast.success(`${comboName} agregado`, { description: "Se sumaron sus productos al carrito." });
+    openCart();
+  }
 
   return (
     <div>
@@ -29,6 +43,44 @@ export function Home() {
           ))}
         </div>
       </section>
+
+      {combos.length > 0 && (
+        <section className="bg-stoka-success-100/40 py-10">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <div className="mb-4 flex items-center gap-2">
+              <Gift className="size-6 text-stoka-success" aria-hidden="true" />
+              <h2 className="font-display text-xl font-semibold text-stoka-green-900 sm:text-2xl">Combos especiales</h2>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {combos.map((combo) => {
+                const items = combo.productIds
+                  .map((id) => products.find((p) => p.id === id))
+                  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+                const normalPrice = items.reduce((sum, p) => sum + p.price, 0);
+                if (items.length < 2 || combo.comboPrice >= normalPrice) return null;
+                return (
+                  <div key={combo.id} className="flex flex-col gap-3 rounded-xl border border-stoka-border bg-stoka-surface p-4 shadow-card">
+                    <p className="font-display text-lg font-bold text-stoka-green-900">{combo.name}</p>
+                    <div className="flex items-center gap-2">
+                      {items.map((p) => (
+                        <ProductImage key={p.id} hue={p.imageHue} icon={p.imageIcon} name={p.name} className="size-12 shrink-0" iconClassName="size-5" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-slate-500">{items.map((p) => p.name).join(" + ")}</p>
+                    <div className="mt-auto flex items-center justify-between">
+                      <div>
+                        <span className="text-sm text-slate-400 line-through">{formatCurrency(normalPrice)}</span>{" "}
+                        <span className="font-display text-xl font-bold text-stoka-success">{formatCurrency(combo.comboPrice)}</span>
+                      </div>
+                      <Button size="sm" onClick={() => addComboToCart(combo.name, combo.productIds)}>Agregar combo</Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
 
       {offers.length > 0 && (
         <section className="bg-stoka-coral-100/40 py-10">

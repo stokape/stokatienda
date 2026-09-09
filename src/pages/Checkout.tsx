@@ -13,6 +13,7 @@ import { ProductImage } from "../components/store/ProductImage";
 import { Button } from "../components/ui/Button";
 import { EmptyState } from "../components/ui/EmptyState";
 import { Field, Input, Select, Textarea } from "../components/ui/form";
+import { computeComboDiscount } from "../lib/combos";
 import { formatCurrency } from "../lib/format";
 import { generateId } from "../lib/id";
 import { useCartStore } from "../store/cartStore";
@@ -33,6 +34,7 @@ const paymentOptions: { value: PaymentMethod; label: string; icon: typeof Smartp
 export function Checkout() {
   const navigate = useNavigate();
   const products = useDataStore((s) => s.products);
+  const combos = useDataStore((s) => s.combos);
   const config = useDataStore((s) => s.config);
   const createOrder = useDataStore((s) => s.createOrder);
   const cartLines = useCartStore((s) => s.lines);
@@ -70,10 +72,14 @@ export function Checkout() {
     (acc, l) => acc + (l.product.compareAtPrice ? (l.product.compareAtPrice - l.product.price) * l.quantity : 0),
     0,
   );
+  const { applied: appliedCombos, totalDiscount: comboDiscount } = useMemo(
+    () => computeComboDiscount(cartLines, products, combos),
+    [cartLines, products, combos],
+  );
   const zone = config.deliveryZones.find((z) => z.district === district);
   const deliveryFee =
     fulfillment === "recojo" ? 0 : subtotal >= config.freeDeliveryThreshold ? 0 : zone?.fee ?? config.defaultDeliveryFee;
-  const total = subtotal + deliveryFee;
+  const total = subtotal + deliveryFee - comboDiscount;
 
   if (lines.length === 0) {
     return (
@@ -363,6 +369,12 @@ export function Checkout() {
                 <span>-{formatCurrency(savings)}</span>
               </div>
             )}
+            {appliedCombos.map(({ combo, times, discountPerApplication }) => (
+              <div key={combo.id} className="flex justify-between text-stoka-success">
+                <span>🎁 {combo.name}{times > 1 ? ` ×${times}` : ""}</span>
+                <span>-{formatCurrency(discountPerApplication * times)}</span>
+              </div>
+            ))}
             {config.deliveryEnabled && (
               <div className="flex justify-between text-slate-500">
                 <span>Delivery</span>

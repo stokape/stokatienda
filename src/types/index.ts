@@ -49,6 +49,20 @@ export interface Product {
   createdAt: string;
 }
 
+// Promoción entre productos distintos: se pagan juntos a un precio combinado
+// más barato que comprarlos por separado (no confundir con el "precio
+// tachado" de Product, que es un descuento sobre un solo producto). Cada
+// producto de la lista cuenta una vez; para llevarse el combo dos veces hace
+// falta el doble de unidades de cada uno en el carrito.
+export interface Combo {
+  id: string;
+  name: string;
+  productIds: string[]; // 2 o más productos distintos
+  comboPrice: number; // precio combinado (debe ser menor a la suma de precios actuales)
+  active: boolean;
+  createdAt: string;
+}
+
 export type PaymentMethod =
   | "yape"
   | "plin"

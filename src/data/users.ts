@@ -18,7 +18,7 @@ export const roleLabels: Record<string, string> = {
 // Qué secciones del panel puede ver cada rol.
 export const roleAccess: Record<string, string[]> = {
   administrador: [
-    "dashboard", "venta-rapida", "productos", "catalogo", "inventario", "pedidos", "pagos",
+    "dashboard", "venta-rapida", "productos", "catalogo", "combos", "inventario", "pedidos", "pagos",
     "caja", "clientes", "proveedores", "usuarios", "reportes", "sugerencias", "configuracion", "contenido", "mantenimiento",
   ],
   cajero: ["dashboard", "venta-rapida", "pedidos", "pagos", "caja", "clientes"],
