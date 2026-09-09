@@ -21,7 +21,7 @@ export function Home() {
         <h2 className="mb-4 font-display text-xl font-semibold text-stoka-green-900 sm:text-2xl">
           Compra por categoría
         </h2>
-        <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
+        <div className="flex flex-wrap gap-3">
           {categories.map((c) => (
             <Link key={c.slug} to={`/catalogo?categoria=${c.slug}`}>
               <CategoryPill category={c} />
