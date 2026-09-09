@@ -40,6 +40,15 @@
   --color-stoka-red-100: #fbdadb;
   --color-stoka-silver-100: #eceeef;
 
+  /* Velo/texto para secciones que se apoyan sobre una foto de fondo (el
+     hero): el velo se invierte entre claro y oscuro para mantener el
+     contraste sin importar qué tan clara u oscura sea la zona de la foto
+     debajo. --stoka-scrim es un trío RGB (sin "color-") para poder darle
+     opacidad fraccionaria dentro de un gradiente con rgb(var(...)/alpha). */
+  --stoka-scrim: 255 255 255;
+  --color-stoka-scrim: #ffffff;
+  --color-stoka-on-scrim: #0d0d0f;
+
   /* --- Alias de compatibilidad ---
      Los componentes se escribieron contra estos nombres durante el primer
      concepto de marca ("bodega de barrio"). En vez de reescribir cada
@@ -120,6 +129,9 @@
     --color-stoka-success-100: #123322;
     --color-stoka-warning-100: #3a2c0d;
     --color-stoka-info-100: #16223f;
+    --stoka-scrim: 13 13 15;
+    --color-stoka-scrim: #0d0d0f;
+    --color-stoka-on-scrim: #ffffff;
 
     --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 24px -10px rgb(0 0 0 / 0.6);
     --shadow-pop: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 24px 48px -16px rgb(0 0 0 / 0.75);
@@ -141,6 +153,9 @@
   --color-stoka-success-100: #123322;
   --color-stoka-warning-100: #3a2c0d;
   --color-stoka-info-100: #16223f;
+  --stoka-scrim: 13 13 15;
+  --color-stoka-scrim: #0d0d0f;
+  --color-stoka-on-scrim: #ffffff;
 
   --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 24px -10px rgb(0 0 0 / 0.6);
   --shadow-pop: 0 1px 0 rgb(255 255 255 / 0.05) inset, 0 24px 48px -16px rgb(0 0 0 / 0.75);

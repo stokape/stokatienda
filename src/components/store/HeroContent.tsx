@@ -25,10 +25,10 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
   }, [interactive]);
 
   const primaryClass = buttonVariants("primary", "lg", "rounded-full px-7 shadow-[0_12px_34px_rgba(225,6,19,.35)]");
-  const secondaryClass = buttonVariants("outline", "lg", "rounded-full border-white/25 text-white hover:bg-white/10");
+  const secondaryClass = buttonVariants("outline", "lg", "rounded-full border-stoka-on-scrim/25 text-stoka-on-scrim hover:bg-stoka-on-scrim/10");
 
   return (
-    <section className="relative isolate overflow-hidden bg-stoka-black text-white">
+    <section className="relative isolate overflow-hidden bg-stoka-bg text-stoka-on-scrim">
       <div className="relative min-h-[560px] sm:min-h-[640px] lg:min-h-[760px]">
         {slides.map((slide, index) => (
           <img
@@ -44,28 +44,30 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
           />
         ))}
 
-        {/* Velo oscuro de izquierda a derecha para que el texto siempre sea legible, sin importar cómo recorte el navegador la foto */}
+        {/* Velo de izquierda a derecha para que el texto siempre sea legible, sin importar cómo
+            recorte el navegador la foto — su color (negro u blanco) se invierte solo según el
+            tema, vía --stoka-scrim (ver index.css), así el hero se acopla a claro/oscuro. */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(100deg,rgba(13,13,15,.95)_0%,rgba(13,13,15,.8)_26%,rgba(13,13,15,.35)_58%,rgba(13,13,15,.12)_78%,transparent_92%)]"
+          className="absolute inset-0 bg-[linear-gradient(100deg,rgb(var(--stoka-scrim)/.95)_0%,rgb(var(--stoka-scrim)/.8)_26%,rgb(var(--stoka-scrim)/.35)_58%,rgb(var(--stoka-scrim)/.12)_78%,transparent_92%)]"
         />
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,transparent_62%,rgba(13,13,15,.65)_100%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,transparent_62%,rgb(var(--stoka-scrim)/.65)_100%)]" />
 
         <div className="relative z-10 mx-auto flex min-h-[560px] max-w-[1440px] flex-col justify-center px-4 py-16 sm:min-h-[640px] sm:px-6 lg:min-h-[760px] lg:px-8">
           <div className="max-w-xl animate-in-up">
-            <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[.2em] text-white/70 sm:text-xs">
+            <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[.2em] text-stoka-on-scrim/70 sm:text-xs">
               <span className="h-[2px] w-6 bg-stoka-red" aria-hidden="true" />
               {content.heroBadge}
             </div>
 
-            <h1 className="mt-5 font-display text-[clamp(2.75rem,8.5vw,6.25rem)] font-bold uppercase leading-[.86] tracking-[-.03em] text-white">
+            <h1 className="mt-5 font-display text-[clamp(2.75rem,8.5vw,6.25rem)] font-bold uppercase leading-[.86] tracking-[-.03em] text-stoka-on-scrim">
               {content.heroTitleLine}{" "}
-              <span className="[-webkit-text-stroke:2px_white] text-transparent sm:[-webkit-text-stroke:3px_white]">
+              <span className="text-transparent [-webkit-text-stroke:2px_var(--color-stoka-on-scrim)] sm:[-webkit-text-stroke:3px_var(--color-stoka-on-scrim)]">
                 {content.heroTitleAccent}
               </span>
             </h1>
 
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/70 sm:text-lg">{content.heroSubtitle}</p>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-stoka-on-scrim/70 sm:text-lg">{content.heroSubtitle}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               {interactive ? (
@@ -89,7 +91,7 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
               )}
             </div>
 
-            <div className={`mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-white/55 sm:text-sm ${interactive ? "lg:hidden" : ""}`}>
+            <div className={`mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-stoka-on-scrim/55 sm:text-sm ${interactive ? "lg:hidden" : ""}`}>
               <span className="flex items-center gap-2">
                 <Store className="size-4 text-stoka-red" aria-hidden="true" /> {content.heroBenefit1}
               </span>
@@ -105,13 +107,13 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
             usan estos breakpoints, y el texto de abajo ya cubre lo mismo en ese caso) */}
         {interactive && (
         <div className="pointer-events-none absolute inset-y-0 right-6 z-10 hidden items-center lg:right-10 lg:flex xl:right-16">
-          <div className="flex max-w-[230px] items-start gap-3 rounded-2xl border border-white/15 bg-black/50 p-4 shadow-pop backdrop-blur-md">
+          <div className="flex max-w-[230px] items-start gap-3 rounded-2xl border border-stoka-on-scrim/15 bg-stoka-scrim/50 p-4 shadow-pop backdrop-blur-md">
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-stoka-red">
               <Zap className="size-4 text-white" aria-hidden="true" />
             </span>
             <div>
-              <p className="text-sm font-bold text-white">{content.heroBenefit1}</p>
-              <p className="mt-0.5 text-xs text-white/60">{content.heroBenefit2}</p>
+              <p className="text-sm font-bold text-stoka-on-scrim">{content.heroBenefit1}</p>
+              <p className="mt-0.5 text-xs text-stoka-on-scrim/60">{content.heroBenefit2}</p>
             </div>
           </div>
         </div>
@@ -119,8 +121,8 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
 
         {/* Selector de escena */}
         <div className="absolute bottom-5 right-4 z-10 flex items-center gap-3 sm:bottom-8 sm:right-8">
-          <span className="font-display text-sm font-bold tracking-wider text-white/70">
-            0{active + 1} <span className="text-white/35">/ 0{slides.length}</span>
+          <span className="font-display text-sm font-bold tracking-wider text-stoka-on-scrim/70">
+            0{active + 1} <span className="text-stoka-on-scrim/35">/ 0{slides.length}</span>
           </span>
           <div className="flex gap-1.5" aria-label="Seleccionar escena">
             {slides.map((slide, index) => (
@@ -131,7 +133,7 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
                 aria-label={`Ver escena ${index + 1}`}
                 aria-current={index === active ? "true" : undefined}
                 className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ${
-                  index === active ? "w-8 bg-stoka-red" : "w-3 bg-white/40 hover:bg-white/70"
+                  index === active ? "w-8 bg-stoka-red" : "w-3 bg-stoka-on-scrim/40 hover:bg-stoka-on-scrim/70"
                 }`}
               />
             ))}
