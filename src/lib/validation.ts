@@ -19,8 +19,6 @@ export interface CheckoutFormValues {
   addressLine: string;
   addressReference: string;
   district: string;
-  scheduledDate: string;
-  scheduledSlot: string;
   paymentMethod: string;
   operationNumber: string;
   hasProofFile: boolean;
@@ -42,8 +40,6 @@ export function validateCheckout(values: CheckoutFormValues): CheckoutErrors {
     if (!isRequired(values.district)) errors.district = "Selecciona tu distrito.";
   }
 
-  if (!isRequired(values.scheduledDate)) errors.scheduledDate = "Elige una fecha de entrega.";
-  if (!isRequired(values.scheduledSlot)) errors.scheduledSlot = "Elige un horario.";
   if (!isRequired(values.paymentMethod)) errors.paymentMethod = "Selecciona un método de pago.";
 
   const requiresProof = ["yape", "plin", "transferencia", "transferencia-interbancaria"].includes(

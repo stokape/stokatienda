@@ -21,8 +21,6 @@ import { useDataStore } from "../store/dataStore";
 import { validateCheckout, type CheckoutErrors } from "../lib/validation";
 import type { FulfillmentType, PaymentMethod } from "../types";
 
-const slots = ["09:00 - 11:00", "11:00 - 13:00", "13:00 - 15:00", "15:00 - 17:00", "17:00 - 19:00", "19:00 - 21:00"];
-
 const paymentOptions: { value: PaymentMethod; label: string; icon: typeof Smartphone; hint: string }[] = [
   { value: "yape", label: "Yape", icon: Smartphone, hint: "Escanea el QR o usa el número" },
   { value: "plin", label: "Plin", icon: Smartphone, hint: "Escanea el QR o usa el número" },
@@ -47,8 +45,6 @@ export function Checkout() {
   const [addressLine, setAddressLine] = useState("");
   const [addressReference, setAddressReference] = useState("");
   const [district, setDistrict] = useState("");
-  const [scheduledDate, setScheduledDate] = useState(new Date().toISOString().slice(0, 10));
-  const [scheduledSlot, setScheduledSlot] = useState("");
   const [notes, setNotes] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | "">("");
   const [operationNumber, setOperationNumber] = useState("");
@@ -108,8 +104,6 @@ export function Checkout() {
       addressLine,
       addressReference,
       district,
-      scheduledDate,
-      scheduledSlot,
       paymentMethod,
       operationNumber,
       hasProofFile: Boolean(proofFileName),
@@ -130,8 +124,6 @@ export function Checkout() {
       fulfillment,
       address:
         fulfillment === "delivery" ? { line: addressLine, reference: addressReference || undefined, district } : undefined,
-      scheduledDate,
-      scheduledSlot,
       notes: notes || undefined,
       items: lines.map((l) => ({
         productId: l.product.id,
@@ -185,13 +177,16 @@ export function Checkout() {
                 <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
               </Field>
             </div>
+            <div className="mt-4">
+              <Field label="Notas para el pedido (opcional)" htmlFor="notes">
+                <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. alguna indicación para tu pedido" />
+              </Field>
+            </div>
           </section>
 
-          <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5 sm:p-6">
-            <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">
-              {config.deliveryEnabled ? "2. Entrega" : "2. Fecha y horario"}
-            </h2>
-            {config.deliveryEnabled ? (
+          {config.deliveryEnabled && (
+            <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5 sm:p-6">
+              <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">2. Entrega</h2>
               <div className="mb-4 flex gap-2">
                 {(["delivery", "recojo"] as FulfillmentType[]).map((opt) => (
                   <button
@@ -208,65 +203,36 @@ export function Checkout() {
                   </button>
                 ))}
               </div>
-            ) : (
-              <p className="mb-4 text-sm text-stoka-ink-muted">
-                Coordinamos todo directo en la tienda — elige la fecha y horario que te acomode abajo.
-              </p>
-            )}
 
-            {config.deliveryEnabled && fulfillment === "delivery" && (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Distrito" htmlFor="district" error={errors.district} required>
-                  <Select id="district" value={district} onChange={(e) => setDistrict(e.target.value)}>
-                    <option value="">Selecciona tu distrito</option>
-                    {config.deliveryZones.map((z) => (
-                      <option key={z.id} value={z.district}>
-                        {z.district} — {formatCurrency(z.fee)} · {z.etaMinutes} min
-                      </option>
-                    ))}
-                  </Select>
-                </Field>
-                <Field label="Dirección" htmlFor="addressLine" error={errors.addressLine} required>
-                  <Input id="addressLine" value={addressLine} onChange={(e) => setAddressLine(e.target.value)} />
-                </Field>
-                <div className="sm:col-span-2">
-                  <Field label="Referencia (opcional)" htmlFor="addressReference">
-                    <Input id="addressReference" value={addressReference} onChange={(e) => setAddressReference(e.target.value)} placeholder="Ej. frente al parque, casa de rejas negras" />
+              {fulfillment === "delivery" && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field label="Distrito" htmlFor="district" error={errors.district} required>
+                    <Select id="district" value={district} onChange={(e) => setDistrict(e.target.value)}>
+                      <option value="">Selecciona tu distrito</option>
+                      {config.deliveryZones.map((z) => (
+                        <option key={z.id} value={z.district}>
+                          {z.district} — {formatCurrency(z.fee)} · {z.etaMinutes} min
+                        </option>
+                      ))}
+                    </Select>
                   </Field>
+                  <Field label="Dirección" htmlFor="addressLine" error={errors.addressLine} required>
+                    <Input id="addressLine" value={addressLine} onChange={(e) => setAddressLine(e.target.value)} />
+                  </Field>
+                  <div className="sm:col-span-2">
+                    <Field label="Referencia (opcional)" htmlFor="addressReference">
+                      <Input id="addressReference" value={addressReference} onChange={(e) => setAddressReference(e.target.value)} placeholder="Ej. frente al parque, casa de rejas negras" />
+                    </Field>
+                  </div>
                 </div>
-              </div>
-            )}
-
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <Field label="Fecha de entrega" htmlFor="scheduledDate" error={errors.scheduledDate} required>
-                <Input
-                  id="scheduledDate"
-                  type="date"
-                  min={new Date().toISOString().slice(0, 10)}
-                  value={scheduledDate}
-                  onChange={(e) => setScheduledDate(e.target.value)}
-                />
-              </Field>
-              <Field label="Horario" htmlFor="scheduledSlot" error={errors.scheduledSlot} required>
-                <Select id="scheduledSlot" value={scheduledSlot} onChange={(e) => setScheduledSlot(e.target.value)}>
-                  <option value="">Selecciona un horario</option>
-                  {slots.map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
-            </div>
-            <div className="mt-4">
-              <Field label="Notas para el pedido (opcional)" htmlFor="notes">
-                <Textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Ej. tocar timbre, dejar con el vecino, etc." />
-              </Field>
-            </div>
-          </section>
+              )}
+            </section>
+          )}
 
           <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5 sm:p-6">
-            <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">3. Método de pago</h2>
+            <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">
+              {config.deliveryEnabled ? "3. Método de pago" : "2. Método de pago"}
+            </h2>
             {errors.paymentMethod && <p className="mb-3 text-sm font-medium text-stoka-red-dark">{errors.paymentMethod}</p>}
             <div className="grid gap-2 sm:grid-cols-2">
               {paymentOptions.map((opt) => (
