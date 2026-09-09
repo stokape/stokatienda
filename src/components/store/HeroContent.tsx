@@ -7,9 +7,11 @@ import type { SiteContent } from "../../types";
 // Fotos reales de la bodega: ambas ya vienen con el lado izquierdo oscurecido
 // de fábrica (pasillo perdiéndose en sombra), que es justo donde se apoya el
 // texto — por eso funcionan como fondo de pantalla completa sin recorte raro.
+// BASE_URL antepone la subruta del despliegue (p. ej. "/stokatienda/" en
+// GitHub Pages) — son archivos de public/, así que Vite no los reescribe solo.
 const slides = [
-  { src: "/hero/stoka-chomp.webp", alt: "Clienta disfrutando un chocolate y cliente eligiendo una bebida en Bodeguita Stoka" },
-  { src: "/hero/stoka-casino.webp", alt: "Amigos escogiendo galletas y bebidas en los pasillos de Bodeguita Stoka" },
+  { src: `${import.meta.env.BASE_URL}hero/stoka-chomp.webp`, alt: "Clienta disfrutando un chocolate y cliente eligiendo una bebida en Bodeguita Stoka" },
+  { src: `${import.meta.env.BASE_URL}hero/stoka-casino.webp`, alt: "Amigos escogiendo galletas y bebidas en los pasillos de Bodeguita Stoka" },
 ] as const;
 
 /** El mismo hero se reutiliza en la vista previa del editor de contenido. */
