@@ -95,7 +95,7 @@ export function OrderTracking() {
               )}
               {order.fulfillment === "delivery"
                 ? `${order.address?.line}, ${order.address?.district}`
-                : "Recojo en tienda"}
+                : "Directo en tienda"}
             </p>
             {order.scheduledDate && (
               <p className="mt-1 text-sm text-slate-500">

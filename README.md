@@ -87,12 +87,14 @@ dos formas de descontar el stock, según qué más necesites:
 
 ## Delivery (apagado por defecto)
 
-El negocio de momento solo atiende con **recojo en tienda** — en Configuración → Delivery
-general hay un interruptor **"Delivery habilitado"** (apagado por defecto). Mientras está
-apagado: el checkout no ofrece la opción de delivery ni pide dirección/distrito, se ocultan
-"Zonas de delivery" y las tarifas, y toda mención a delivery en la tienda (portada, carrito,
-ficha de producto) se ajusta sola a recojo. Actívalo el día que empiecen a repartir a
-domicilio — toda la lógica de zonas, tarifas y delivery gratis ya existe, solo estaba oculta.
+El negocio de momento atiende de forma directa en el local (por dentro sigue siendo el
+`fulfillment: "recojo"` de siempre, pero de cara al cliente no se usa esa palabra ni
+"delivery/envío" — solo "todo directo en tienda") — en Configuración → Delivery general hay
+un interruptor **"Delivery habilitado"** (apagado por defecto). Mientras está apagado: el
+checkout no ofrece la opción de delivery ni pide dirección/distrito, se ocultan "Zonas de
+delivery" y las tarifas, y toda mención a delivery en la tienda (portada, carrito, ficha de
+producto) se ajusta sola. Actívalo el día que empiecen a repartir a domicilio — toda la
+lógica de zonas, tarifas y delivery gratis ya existe, solo estaba oculta.
 
 Los descuentos por producto son 100% manuales: el admin define el precio de venta y,
 opcionalmente, un "precio tachado" (oferta) en Productos — no hay cupones. La otra palanca

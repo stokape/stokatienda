@@ -111,7 +111,7 @@ export function ProductDetail() {
                 </>
               ) : (
                 <>
-                  <Store className="size-4 shrink-0" aria-hidden="true" /> Recojo rápido en tienda
+                  <Store className="size-4 shrink-0" aria-hidden="true" /> Todo directo en tienda
                 </>
               )}
             </span>

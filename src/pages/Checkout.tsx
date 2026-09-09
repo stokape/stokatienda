@@ -189,7 +189,7 @@ export function Checkout() {
 
           <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5 sm:p-6">
             <h2 className="mb-4 font-display text-lg font-semibold text-stoka-green-900">
-              {config.deliveryEnabled ? "2. Entrega" : "2. Recojo en tienda"}
+              {config.deliveryEnabled ? "2. Entrega" : "2. Fecha y horario"}
             </h2>
             {config.deliveryEnabled ? (
               <div className="mb-4 flex gap-2">
@@ -204,13 +204,13 @@ export function Checkout() {
                         : "border-stoka-border text-slate-500"
                     }`}
                   >
-                    {opt === "delivery" ? "Delivery a domicilio" : "Recojo en tienda"}
+                    {opt === "delivery" ? "Delivery a domicilio" : "Directo en tienda"}
                   </button>
                 ))}
               </div>
             ) : (
               <p className="mb-4 text-sm text-stoka-ink-muted">
-                Por ahora solo atendemos con recojo en tienda — elige la fecha y horario que te acomode abajo.
+                Coordinamos todo directo en la tienda — elige la fecha y horario que te acomode abajo.
               </p>
             )}
 

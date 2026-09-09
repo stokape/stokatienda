@@ -414,7 +414,7 @@ export const useDataStore = create<DataState>()(
     }),
     {
       name: "stoka-data-store",
-      version: 4,
+      version: 5,
       // Zustand solo mezcla claves de nivel superior al rehidratar — "config"
       // (o "maintenance") completo vendría del localStorage viejo sin los
       // campos agregados en versiones posteriores (v2: defaultMargin;
@@ -427,6 +427,13 @@ export const useDataStore = create<DataState>()(
         }
         if (version < 4 && state?.maintenance) {
           state.maintenance = { ...defaultMaintenanceConfig, ...state.maintenance };
+        }
+        // v5: se dejó de hablar de "recojo" en el texto de cara al cliente
+        // (todo es directo en el local) — solo se actualiza si nadie tocó
+        // ese campo a mano desde /admin/contenido, para no pisar una
+        // personalización real.
+        if (version < 5 && state?.siteContent?.heroBenefit1 === "Recojo rápido en tienda") {
+          state.siteContent = { ...state.siteContent, heroBenefit1: defaultSiteContent.heroBenefit1 };
         }
         return state;
       },

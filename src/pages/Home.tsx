@@ -133,8 +133,8 @@ export function Home() {
               <>
                 <Store className="size-6 shrink-0 text-stoka-green-600" aria-hidden="true" />
                 <div>
-                  <p className="font-semibold text-stoka-green-900">Recojo en tienda</p>
-                  <p className="text-sm text-slate-500">Pide online y recógelo cuando te acomode.</p>
+                  <p className="font-semibold text-stoka-green-900">Todo directo en tienda</p>
+                  <p className="text-sm text-slate-500">Mira el catálogo online y compra directo con nosotros.</p>
                 </div>
               </>
             )}
@@ -158,7 +158,7 @@ export function Home() {
             <div>
               <p className="font-semibold text-stoka-green-900">Efectivo</p>
               <p className="text-sm text-slate-500">
-                {deliveryEnabled ? "Paga contra entrega si lo prefieres así." : "Paga en efectivo al recoger tu pedido."}
+                {deliveryEnabled ? "Paga contra entrega si lo prefieres así." : "Paga en efectivo directo en la tienda."}
               </p>
             </div>
           </div>
