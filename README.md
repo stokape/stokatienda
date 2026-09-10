@@ -62,6 +62,14 @@ leer el código de barras de un producto físico:
 - Funciona desde cualquier dispositivo con cámara y navegador (celular incluido), ya que usa
   la cámara del propio navegador — no requiere una app nativa.
 
+Cuando el código no existe en el catálogo (ya sea por cámara o escribiéndolo a mano en
+"Código de barras" dentro del alta de producto y dándole a **Buscar**), antes de dejarte
+completar todo a mano la app consulta [Open Food Facts](https://world.openfoodfacts.org)
+(base colaborativa y gratuita, sin API key, se consulta directo desde el navegador) — si el
+producto está ahí, **adelanta nombre y presentación** (y muestra su foto como referencia). No
+cubre marcas 100% locales ni trae precio (eso es siempre propio de la tienda); si no aparece,
+sigue el alta manual de siempre, sin ningún aviso de error.
+
 ## Sugerencias de clientes
 
 Un botón flotante ("¿Qué te falta?") visible en toda la tienda pública abre un formulario

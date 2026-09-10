@@ -1,5 +1,5 @@
-import { Pencil, Plus, ScanBarcode, Search, Trash2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { Loader2, Pencil, Plus, ScanBarcode, Search, Sparkles, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BarcodeScannerModal } from "../../components/admin/BarcodeScannerModal";
@@ -9,6 +9,7 @@ import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { Field, Input, Select, Textarea, Checkbox } from "../../components/ui/form";
 import { Modal } from "../../components/ui/Modal";
+import { lookupBarcodeOnline, type BarcodeLookupResult } from "../../lib/barcodeLookup";
 import { iconRegistry } from "../../lib/icon-registry";
 import { formatCurrency } from "../../lib/format";
 import { useDataStore } from "../../store/dataStore";
@@ -62,6 +63,8 @@ export function ProductsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
   const [confirmDelete, setConfirmDelete] = useState<Product | null>(null);
+  const [lookupState, setLookupState] = useState<"idle" | "loading" | "found" | "not-found">("idle");
+  const [lookupResult, setLookupResult] = useState<BarcodeLookupResult | null>(null);
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -83,14 +86,42 @@ export function ProductsPage() {
     setEditingId(null);
     const defaultCategory = categories[0]?.slug ?? emptyForm.category;
     setForm({ ...emptyForm, category: defaultCategory, barcode: prefillBarcode ?? "" });
+    setLookupState("idle");
+    setLookupResult(null);
     setModalOpen(true);
+    if (prefillBarcode) runBarcodeLookup(prefillBarcode);
   }
 
   function openEdit(product: Product) {
     setEditingId(product.id);
     const { id: _id, createdAt: _createdAt, ...rest } = product;
     setForm(rest);
+    setLookupState("idle");
+    setLookupResult(null);
     setModalOpen(true);
+  }
+
+  // Contador para descartar una respuesta que llegue tarde (p. ej. si el
+  // admin escanea otro código, o cierra el modal, antes de que responda).
+  const lookupRequestId = useRef(0);
+
+  async function runBarcodeLookup(code: string) {
+    const requestId = ++lookupRequestId.current;
+    setLookupState("loading");
+    const result = await lookupBarcodeOnline(code);
+    if (lookupRequestId.current !== requestId) return; // llegó tarde, ya no aplica
+    if (result) {
+      setLookupResult(result);
+      setLookupState("found");
+      setForm((f) => ({
+        ...f,
+        name: f.name || result.name,
+        presentation: f.presentation || result.presentation || f.presentation,
+      }));
+    } else {
+      setLookupResult(null);
+      setLookupState("not-found");
+    }
   }
 
   // Si venimos de "Escanear código" en Inventario con un código que no
@@ -216,6 +247,39 @@ export function ProductsPage() {
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editingId ? "Editar producto" : "Nuevo producto"} size="lg">
         <form onSubmit={handleSave} className="grid gap-4 sm:grid-cols-2">
+          {lookupState !== "idle" && (
+            <div className="sm:col-span-2">
+              {lookupState === "loading" && (
+                <div className="flex items-center gap-2 rounded-lg border border-stoka-border bg-stoka-surface-2 p-3 text-sm text-stoka-ink-muted">
+                  <Loader2 className="size-4 shrink-0 animate-spin" aria-hidden="true" />
+                  Buscando este código en Open Food Facts…
+                </div>
+              )}
+              {lookupState === "found" && lookupResult && (
+                <div className="flex items-center gap-3 rounded-lg border border-stoka-success/40 bg-stoka-success-100 p-3 text-sm text-stoka-ink">
+                  {lookupResult.imageUrl ? (
+                    <img src={lookupResult.imageUrl} alt="" className="size-12 shrink-0 rounded-lg border border-stoka-border object-cover" />
+                  ) : (
+                    <span className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-stoka-success-100">
+                      <Sparkles className="size-5 text-stoka-success" aria-hidden="true" />
+                    </span>
+                  )}
+                  <div>
+                    <p className="font-semibold">Lo encontramos: {lookupResult.name}</p>
+                    <p className="text-xs text-stoka-ink-muted">
+                      {[lookupResult.brand, lookupResult.presentation].filter(Boolean).join(" · ") || "Revisa los datos antes de guardar."}
+                    </p>
+                  </div>
+                </div>
+              )}
+              {lookupState === "not-found" && (
+                <p className="rounded-lg border border-dashed border-stoka-border bg-stoka-surface-2 p-3 text-sm text-stoka-ink-muted">
+                  No lo encontramos en la base pública — completa los datos a mano.
+                </p>
+              )}
+            </div>
+          )}
+
           <Field label="Nombre" htmlFor="p-name" required>
             <Input id="p-name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           </Field>
@@ -240,8 +304,19 @@ export function ProductsPage() {
           <Field label="SKU" htmlFor="p-sku" required>
             <Input id="p-sku" value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
           </Field>
-          <Field label="Código de barras" htmlFor="p-barcode">
-            <Input id="p-barcode" value={form.barcode} onChange={(e) => setForm({ ...form, barcode: e.target.value })} />
+          <Field label="Código de barras" htmlFor="p-barcode" hint="Escríbelo o pégalo y dale a Buscar para adelantar nombre y presentación.">
+            <div className="flex gap-2">
+              <Input id="p-barcode" value={form.barcode} onChange={(e) => setForm({ ...form, barcode: e.target.value })} className="flex-1" />
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                disabled={!form.barcode.trim() || lookupState === "loading"}
+                onClick={() => runBarcodeLookup(form.barcode.trim())}
+              >
+                Buscar
+              </Button>
+            </div>
           </Field>
           <Field label="Precio de venta (S/)" htmlFor="p-price" required>
             <Input id="p-price" type="number" min={0} step={0.1} value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} />
