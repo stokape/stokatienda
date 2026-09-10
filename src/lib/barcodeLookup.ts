@@ -1,21 +1,50 @@
-// Consulta Open Food Facts (base colaborativa y gratuita de productos, sin
-// necesidad de API key) para adelantar nombre/marca/presentación cuando se
-// da de alta un producto por un código de barras que no está en nuestro
-// catálogo. Es solo un adelanto: nunca trae precio (eso es siempre propio de
-// cada tienda) ni cubre marcas 100% locales — si no aparece, se completa a
-// mano como siempre. CORS está habilitado por el propio servicio, así que se
-// puede consultar directo desde el navegador, sin backend propio de por medio.
+// Adelanta nombre/marca/presentación al dar de alta un producto por un
+// código de barras que no está en el catálogo — en dos pasos:
+//
+// 1. Un archivo local (public/data/barcode-seed-pe.json, ~1500 productos
+//    reales de marcas que se venden en Perú — Gloria, Laive, Alicorp,
+//    Altomayo, Quaker, etc. — sacado una sola vez de Open Food Facts filtrado
+//    por país) se consulta primero: no necesita internet ni tiene límite de
+//    uso, y cubre lo que más se repite en una bodega peruana.
+// 2. Si no está ahí, se consulta Open Food Facts en vivo (base colaborativa
+//    y gratuita, sin API key, CORS habilitado) como respaldo — cubre mucho
+//    más, pero no es específico de Perú (bastantes productos peruanos ahí
+//    están etiquetados con otro país, o simplemente no están) y si no hay
+//    internet en ese momento, no hay resultado.
+//
+// Ninguna de las dos trae precio — eso es siempre propio de cada tienda.
 export interface BarcodeLookupResult {
+  name: string;
+  brand?: string;
+  presentation?: string;
+  imageUrl?: string;
+  source: "local" | "online";
+}
+
+interface SeedEntry {
+  code: string;
   name: string;
   brand?: string;
   presentation?: string;
   imageUrl?: string;
 }
 
+let localIndexPromise: Promise<Map<string, SeedEntry>> | null = null;
+
+function loadLocalIndex(): Promise<Map<string, SeedEntry>> {
+  if (!localIndexPromise) {
+    localIndexPromise = fetch(`${import.meta.env.BASE_URL}data/barcode-seed-pe.json`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((entries: SeedEntry[]) => new Map(entries.map((e) => [e.code, e])))
+      .catch(() => new Map<string, SeedEntry>());
+  }
+  return localIndexPromise;
+}
+
 const OFF_FIELDS = "product_name,product_name_es,brands,quantity,image_front_url,image_url";
 const TIMEOUT_MS = 6000;
 
-export async function lookupBarcodeOnline(code: string): Promise<BarcodeLookupResult | null> {
+async function lookupOnline(code: string): Promise<BarcodeLookupResult | null> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
@@ -36,6 +65,7 @@ export async function lookupBarcodeOnline(code: string): Promise<BarcodeLookupRe
       brand: typeof p.brands === "string" && p.brands.trim() ? p.brands.split(",")[0].trim() : undefined,
       presentation: typeof p.quantity === "string" && p.quantity.trim() ? p.quantity.trim() : undefined,
       imageUrl: p.image_front_url || p.image_url || undefined,
+      source: "online",
     };
   } catch {
     // Sin internet, tardó demasiado, o el servicio no respondió — se sigue
@@ -44,4 +74,12 @@ export async function lookupBarcodeOnline(code: string): Promise<BarcodeLookupRe
   } finally {
     clearTimeout(timeout);
   }
+}
+
+export async function lookupBarcode(code: string): Promise<BarcodeLookupResult | null> {
+  const local = (await loadLocalIndex()).get(code);
+  if (local) {
+    return { name: local.name, brand: local.brand, presentation: local.presentation, imageUrl: local.imageUrl, source: "local" };
+  }
+  return lookupOnline(code);
 }

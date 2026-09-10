@@ -9,7 +9,7 @@ import { Badge } from "../../components/ui/Badge";
 import { Button } from "../../components/ui/Button";
 import { Field, Input, Select, Textarea, Checkbox } from "../../components/ui/form";
 import { Modal } from "../../components/ui/Modal";
-import { lookupBarcodeOnline, type BarcodeLookupResult } from "../../lib/barcodeLookup";
+import { lookupBarcode, type BarcodeLookupResult } from "../../lib/barcodeLookup";
 import { iconRegistry } from "../../lib/icon-registry";
 import { formatCurrency } from "../../lib/format";
 import { useDataStore } from "../../store/dataStore";
@@ -108,7 +108,7 @@ export function ProductsPage() {
   async function runBarcodeLookup(code: string) {
     const requestId = ++lookupRequestId.current;
     setLookupState("loading");
-    const result = await lookupBarcodeOnline(code);
+    const result = await lookupBarcode(code);
     if (lookupRequestId.current !== requestId) return; // llegó tarde, ya no aplica
     if (result) {
       setLookupResult(result);
@@ -252,7 +252,7 @@ export function ProductsPage() {
               {lookupState === "loading" && (
                 <div className="flex items-center gap-2 rounded-lg border border-stoka-border bg-stoka-surface-2 p-3 text-sm text-stoka-ink-muted">
                   <Loader2 className="size-4 shrink-0 animate-spin" aria-hidden="true" />
-                  Buscando este código en Open Food Facts…
+                  Buscando este código…
                 </div>
               )}
               {lookupState === "found" && lookupResult && (
@@ -265,7 +265,12 @@ export function ProductsPage() {
                     </span>
                   )}
                   <div>
-                    <p className="font-semibold">Lo encontramos: {lookupResult.name}</p>
+                    <p className="flex items-center gap-2 font-semibold">
+                      Lo encontramos: {lookupResult.name}
+                      <Badge variant={lookupResult.source === "local" ? "green" : "blue"}>
+                        {lookupResult.source === "local" ? "Base local" : "En línea"}
+                      </Badge>
+                    </p>
                     <p className="text-xs text-stoka-ink-muted">
                       {[lookupResult.brand, lookupResult.presentation].filter(Boolean).join(" · ") || "Revisa los datos antes de guardar."}
                     </p>

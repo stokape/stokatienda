@@ -64,11 +64,21 @@ leer el código de barras de un producto físico:
 
 Cuando el código no existe en el catálogo (ya sea por cámara o escribiéndolo a mano en
 "Código de barras" dentro del alta de producto y dándole a **Buscar**), antes de dejarte
-completar todo a mano la app consulta [Open Food Facts](https://world.openfoodfacts.org)
-(base colaborativa y gratuita, sin API key, se consulta directo desde el navegador) — si el
-producto está ahí, **adelanta nombre y presentación** (y muestra su foto como referencia). No
-cubre marcas 100% locales ni trae precio (eso es siempre propio de la tienda); si no aparece,
-sigue el alta manual de siempre, sin ningún aviso de error.
+completar todo a mano se intenta adelantar nombre y presentación en dos pasos:
+
+1. **`public/data/barcode-seed-pe.json`** — ~1500 productos reales de marcas que se venden en
+   Perú (Gloria, Laive, Alicorp, Altomayo, Quaker, etc.), sacados una sola vez de Open Food
+   Facts filtrado por país. Se consulta primero, **sin necesidad de internet** una vez que el
+   navegador lo descargó (222 KB, se cachea en memoria durante la sesión) — el resultado dice
+   "Base local".
+2. Si no está ahí, se consulta [Open Food Facts](https://world.openfoodfacts.org) en vivo
+   (base colaborativa y gratuita, sin API key, se llama directo desde el navegador) — el
+   resultado dice "En línea". Esta base es mucho más grande, pero no es específica de Perú (para
+   productos peruanos hay bastante etiquetado con otro país, o simplemente no están) y necesita
+   internet en el momento.
+
+Ninguna de las dos trae precio (eso es siempre propio de la tienda) ni cubre absolutamente todo
+— si no aparece en ningún lado, sigue el alta manual de siempre, sin ningún aviso de error.
 
 ## Sugerencias de clientes
 
