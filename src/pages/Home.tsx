@@ -45,7 +45,7 @@ export function Home() {
       </section>
 
       {combos.length > 0 && (
-        <section className="bg-stoka-success-100/40 py-10">
+        <section className="bg-[rgb(var(--stoka-success-100)/.4)] py-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mb-4 flex items-center gap-2">
               <Gift className="size-6 text-stoka-success" aria-hidden="true" />
@@ -83,7 +83,7 @@ export function Home() {
       )}
 
       {offers.length > 0 && (
-        <section className="bg-stoka-coral-100/40 py-10">
+        <section className="bg-[rgb(var(--stoka-red-100)/.4)] py-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-display text-xl font-semibold text-stoka-green-900 sm:text-2xl">

@@ -12,6 +12,7 @@
      de la identidad; el resto de tokens (fondo/superficie/texto) son
      semánticos y cambian entre tema claro y oscuro más abajo. */
   --color-stoka-red: #e10613;
+  --stoka-red: 225 6 19;
   --color-stoka-red-dark: #b70b15;
   --color-stoka-red-light: #ff4d4f;
 
@@ -23,30 +24,42 @@
 
   --color-stoka-success: #1fa463;
   --color-stoka-success-100: #dff5e8;
+  --stoka-success-100: 223 245 232;
   --color-stoka-warning: #d99d0e;
   --color-stoka-warning-100: #fbedcc;
   --color-stoka-info: #3a6df0;
   --color-stoka-info-100: #dfe7fd;
 
-  /* --- Tokens semánticos (tema claro por defecto) --- */
+  /* --- Tokens semánticos (tema claro por defecto) ---
+     Los que además se usan con opacidad fraccionaria (bg-x/50, text-x/70)
+     en algún componente tienen también un trío RGB paralelo --stoka-x (sin
+     "color-"): el modificador de opacidad normal de Tailwind (text-x/50)
+     compila a color-mix(), que en navegadores sin soporte (Safari < 16.2,
+     WebViews viejos) ignora esa regla y se queda con el valor fijo de tema
+     claro que Tailwind deja como respaldo — en tema oscuro se vuelve
+     invisible o casi. rgb(var(--stoka-x)/alpha) evita ese problema porque
+     no depende de color-mix(), a costa de tener que usarlo como valor
+     arbitrario (bg-[rgb(var(--stoka-x)/.5)]) en vez de la clase normal. */
   --color-stoka-bg: #f5f5f6;
+  --stoka-bg: 245 245 246;
   --color-stoka-bg-alt: #ececee;
   --color-stoka-surface: #ffffff;
+  --stoka-surface: 255 255 255;
   --color-stoka-surface-2: #f0f0f2;
+  --stoka-surface-2: 240 240 242;
   --color-stoka-border: #dcdce0;
   --color-stoka-border-strong: #b9b9be;
   --color-stoka-ink: #0d0d0f;
+  --stoka-ink: 13 13 15;
   --color-stoka-ink-muted: #66666b;
   --color-stoka-red-100: #fbdadb;
+  --stoka-red-100: 251 218 219;
   --color-stoka-silver-100: #eceeef;
 
-  /* Velo/texto para secciones que se apoyan sobre una foto de fondo (el
-     hero): el velo se invierte entre claro y oscuro para mantener el
-     contraste sin importar qué tan clara u oscura sea la zona de la foto
-     debajo. --stoka-scrim es un trío RGB (sin "color-") para poder darle
-     opacidad fraccionaria dentro de un gradiente con rgb(var(...)/alpha). */
+  /* Velo/texto de una foto de fondo (el hero): mismo trato que arriba. */
   --stoka-scrim: 255 255 255;
   --color-stoka-scrim: #ffffff;
+  --stoka-on-scrim: 13 13 15;
   --color-stoka-on-scrim: #0d0d0f;
 
   /* --- Alias de compatibilidad ---
@@ -116,21 +129,29 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --color-stoka-bg: #0d0d0f;
+    --stoka-bg: 13 13 15;
     --color-stoka-bg-alt: #131316;
     --color-stoka-surface: #18181b;
+    --stoka-surface: 24 24 27;
     --color-stoka-surface-2: #202024;
+    --stoka-surface-2: 32 32 36;
     --color-stoka-border: #2b2b30;
     --color-stoka-border-strong: #3d3d43;
     --color-stoka-ink: #f5f5f6;
+    --stoka-ink: 245 245 246;
     --color-stoka-ink-muted: #9a9aa0;
     --color-stoka-red: #ff3b3b;
+    --stoka-red: 255 59 59;
     --color-stoka-red-100: #3a1417;
+    --stoka-red-100: 58 20 23;
     --color-stoka-silver-100: #232326;
     --color-stoka-success-100: #123322;
+    --stoka-success-100: 18 51 34;
     --color-stoka-warning-100: #3a2c0d;
     --color-stoka-info-100: #16223f;
     --stoka-scrim: 13 13 15;
     --color-stoka-scrim: #0d0d0f;
+    --stoka-on-scrim: 255 255 255;
     --color-stoka-on-scrim: #ffffff;
 
     --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 24px -10px rgb(0 0 0 / 0.6);
@@ -140,21 +161,29 @@
 }
 :root[data-theme="dark"] {
   --color-stoka-bg: #0d0d0f;
+  --stoka-bg: 13 13 15;
   --color-stoka-bg-alt: #131316;
   --color-stoka-surface: #18181b;
+  --stoka-surface: 24 24 27;
   --color-stoka-surface-2: #202024;
+  --stoka-surface-2: 32 32 36;
   --color-stoka-border: #2b2b30;
   --color-stoka-border-strong: #3d3d43;
   --color-stoka-ink: #f5f5f6;
+  --stoka-ink: 245 245 246;
   --color-stoka-ink-muted: #9a9aa0;
   --color-stoka-red: #ff3b3b;
+  --stoka-red: 255 59 59;
   --color-stoka-red-100: #3a1417;
+  --stoka-red-100: 58 20 23;
   --color-stoka-silver-100: #232326;
   --color-stoka-success-100: #123322;
+  --stoka-success-100: 18 51 34;
   --color-stoka-warning-100: #3a2c0d;
   --color-stoka-info-100: #16223f;
   --stoka-scrim: 13 13 15;
   --color-stoka-scrim: #0d0d0f;
+  --stoka-on-scrim: 255 255 255;
   --color-stoka-on-scrim: #ffffff;
 
   --shadow-card: 0 1px 0 rgb(255 255 255 / 0.04) inset, 0 10px 24px -10px rgb(0 0 0 / 0.6);

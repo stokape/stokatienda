@@ -25,7 +25,11 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
   }, [interactive]);
 
   const primaryClass = buttonVariants("primary", "lg", "rounded-full px-7 shadow-[0_12px_34px_rgba(225,6,19,.35)]");
-  const secondaryClass = buttonVariants("outline", "lg", "rounded-full border-stoka-on-scrim/25 text-stoka-on-scrim hover:bg-stoka-on-scrim/10");
+  const secondaryClass = buttonVariants(
+    "outline",
+    "lg",
+    "rounded-full border-[rgb(var(--stoka-on-scrim)/.25)] text-stoka-on-scrim hover:bg-[rgb(var(--stoka-on-scrim)/.1)]",
+  );
 
   return (
     <section className="relative isolate overflow-hidden bg-stoka-bg text-stoka-on-scrim">
@@ -55,7 +59,7 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
 
         <div className="relative z-10 mx-auto flex min-h-[560px] max-w-[1440px] flex-col justify-center px-4 py-16 sm:min-h-[640px] sm:px-6 lg:min-h-[760px] lg:px-8">
           <div className="max-w-xl animate-in-up">
-            <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[.2em] text-stoka-on-scrim/70 sm:text-xs">
+            <div className="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[.2em] text-[rgb(var(--stoka-on-scrim)/.7)] sm:text-xs">
               <span className="h-[2px] w-6 bg-stoka-red" aria-hidden="true" />
               {content.heroBadge}
             </div>
@@ -67,7 +71,7 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
               </span>
             </h1>
 
-            <p className="mt-6 max-w-md text-base leading-relaxed text-stoka-on-scrim/70 sm:text-lg">{content.heroSubtitle}</p>
+            <p className="mt-6 max-w-md text-base leading-relaxed text-[rgb(var(--stoka-on-scrim)/.7)] sm:text-lg">{content.heroSubtitle}</p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               {interactive ? (
@@ -91,7 +95,7 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
               )}
             </div>
 
-            <div className={`mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-stoka-on-scrim/55 sm:text-sm ${interactive ? "lg:hidden" : ""}`}>
+            <div className={`mt-8 flex flex-wrap gap-x-5 gap-y-2 text-xs font-semibold text-[rgb(var(--stoka-on-scrim)/.55)] sm:text-sm ${interactive ? "lg:hidden" : ""}`}>
               <span className="flex items-center gap-2">
                 <Store className="size-4 text-stoka-red" aria-hidden="true" /> {content.heroBenefit1}
               </span>
@@ -107,13 +111,13 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
             usan estos breakpoints, y el texto de abajo ya cubre lo mismo en ese caso) */}
         {interactive && (
         <div className="pointer-events-none absolute inset-y-0 right-6 z-10 hidden items-center lg:right-10 lg:flex xl:right-16">
-          <div className="flex max-w-[230px] items-start gap-3 rounded-2xl border border-stoka-on-scrim/15 bg-stoka-scrim/50 p-4 shadow-pop backdrop-blur-md">
+          <div className="flex max-w-[230px] items-start gap-3 rounded-2xl border border-[rgb(var(--stoka-on-scrim)/.15)] bg-[rgb(var(--stoka-scrim)/.5)] p-4 shadow-pop backdrop-blur-md">
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-stoka-red">
               <Zap className="size-4 text-white" aria-hidden="true" />
             </span>
             <div>
               <p className="text-sm font-bold text-stoka-on-scrim">{content.heroBenefit1}</p>
-              <p className="mt-0.5 text-xs text-stoka-on-scrim/60">{content.heroBenefit2}</p>
+              <p className="mt-0.5 text-xs text-[rgb(var(--stoka-on-scrim)/.6)]">{content.heroBenefit2}</p>
             </div>
           </div>
         </div>
@@ -121,8 +125,8 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
 
         {/* Selector de escena */}
         <div className="absolute bottom-5 right-4 z-10 flex items-center gap-3 sm:bottom-8 sm:right-8">
-          <span className="font-display text-sm font-bold tracking-wider text-stoka-on-scrim/70">
-            0{active + 1} <span className="text-stoka-on-scrim/35">/ 0{slides.length}</span>
+          <span className="font-display text-sm font-bold tracking-wider text-[rgb(var(--stoka-on-scrim)/.7)]">
+            0{active + 1} <span className="text-[rgb(var(--stoka-on-scrim)/.35)]">/ 0{slides.length}</span>
           </span>
           <div className="flex gap-1.5" aria-label="Seleccionar escena">
             {slides.map((slide, index) => (
@@ -133,7 +137,9 @@ export function HeroContent({ content, interactive = true }: { content: SiteCont
                 aria-label={`Ver escena ${index + 1}`}
                 aria-current={index === active ? "true" : undefined}
                 className={`h-1.5 rounded-full transition-[width,background-color] duration-500 ${
-                  index === active ? "w-8 bg-stoka-red" : "w-3 bg-stoka-on-scrim/40 hover:bg-stoka-on-scrim/70"
+                  index === active
+                    ? "w-8 bg-stoka-red"
+                    : "w-3 bg-[rgb(var(--stoka-on-scrim)/.4)] hover:bg-[rgb(var(--stoka-on-scrim)/.7)]"
                 }`}
               />
             ))}

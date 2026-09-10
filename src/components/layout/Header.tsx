@@ -33,7 +33,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b border-stoka-border bg-stoka-bg/95 backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-stoka-border bg-[rgb(var(--stoka-bg)/.95)] backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
         <button
           className="cursor-pointer rounded-lg p-2 text-stoka-ink hover:bg-stoka-surface-2 lg:hidden"

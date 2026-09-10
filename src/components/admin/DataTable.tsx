@@ -41,7 +41,7 @@ export function DataTable<T>({
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={keyExtractor(row)} className="border-b border-stoka-cream-100 last:border-0 hover:bg-stoka-cream-100/50">
+            <tr key={keyExtractor(row)} className="border-b border-stoka-cream-100 last:border-0 hover:bg-[rgb(var(--stoka-surface-2)/.5)]">
               {columns.map((col) => (
                 <td key={col.header} className={`px-4 py-3 align-middle ${col.className ?? ""}`}>
                   {col.render(row)}

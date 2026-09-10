@@ -13,7 +13,7 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-stoka-border bg-stoka-surface/60 px-6 py-14 text-center">
+    <div className="flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-stoka-border bg-[rgb(var(--stoka-surface)/.6)] px-6 py-14 text-center">
       <div className="rounded-full border border-stoka-border bg-stoka-yellow-100 p-4">
         <Icon className="size-7 text-stoka-green-700" aria-hidden="true" />
       </div>

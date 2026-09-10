@@ -88,7 +88,7 @@ export function ProductDetail() {
             <StockBadge stock={product.stock} minStock={product.minStock} />
           </div>
 
-          <p className="mt-5 text-[15px] leading-relaxed text-stoka-ink/80">{product.description}</p>
+          <p className="mt-5 text-[15px] leading-relaxed text-[rgb(var(--stoka-ink)/.8)]">{product.description}</p>
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <QuantityStepper quantity={quantity} onChange={(n) => setQuantity(Math.max(1, n))} max={product.stock} />
@@ -103,7 +103,7 @@ export function ProductDetail() {
             </Button>
           </div>
 
-          <div className="mt-6 flex flex-col gap-2 rounded-xl border-2 border-stoka-green-600/20 bg-stoka-green-50 p-4 text-sm text-stoka-green-800">
+          <div className="mt-6 flex flex-col gap-2 rounded-xl border-2 border-[rgb(var(--stoka-red)/.2)] bg-stoka-green-50 p-4 text-sm text-stoka-green-800">
             <span className="flex items-center gap-2">
               {deliveryEnabled ? (
                 <>

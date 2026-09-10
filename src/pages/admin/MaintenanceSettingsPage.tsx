@@ -65,7 +65,7 @@ export function MaintenanceSettingsPage() {
       <div
         className={`mb-6 flex items-center gap-3 rounded-xl border p-4 text-sm font-semibold ${
           currentlyActive
-            ? "border-stoka-red/40 bg-stoka-red-100 text-stoka-red"
+            ? "border-[rgb(var(--stoka-red)/.4)] bg-stoka-red-100 text-stoka-red"
             : "border-stoka-success/40 bg-stoka-success-100 text-stoka-success"
         }`}
       >
