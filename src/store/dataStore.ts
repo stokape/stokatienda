@@ -310,7 +310,14 @@ export const useDataStore = create<DataState>()(
       addPurchase: (p) =>
         set((state) => ({
           purchases: [
-            { ...p, id: generateId("pur"), status: "pendiente", createdAt: new Date().toISOString() },
+            {
+              ...p,
+              id: generateId("pur"),
+              // Sin ítems no hay stock que recibir — no tiene sentido dejarla
+              // "pendiente" para siempre, así que queda directo como registro.
+              status: p.items.length > 0 ? "pendiente" : "recibida",
+              createdAt: new Date().toISOString(),
+            },
             ...state.purchases,
           ],
         })),

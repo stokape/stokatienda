@@ -167,11 +167,21 @@ export interface Supplier {
   category: string;
 }
 
+// Una compra puede ser tan simple como la foto de una boleta con el total
+// pagado (sin itemizar productos todavía) — así sirve para llevar registro
+// de dónde se compra y a qué precio, aunque no se sepa el detalle exacto al
+// momento de cargarla. supplierId es opcional porque no toda compra viene
+// de un proveedor registrado (mercado, mayorista de paso, etc.) — en esos
+// casos "place" es el único dato de "dónde".
 export interface Purchase {
   id: string;
-  supplierId: string;
-  items: { productId: string; quantity: number; unitCost: number }[];
-  total: number;
+  supplierId?: string;
+  place?: string; // lugar de compra en texto libre (si no hay proveedor registrado, o además de uno)
+  purchaseDate?: string; // fecha real de la compra (de la boleta); si falta, se usa createdAt
+  receiptNumber?: string; // N° de boleta/factura, opcional
+  receiptImage?: string; // foto o escaneo de la boleta, como data URL
+  items: { productId: string; quantity: number; unitCost: number }[]; // puede quedar vacío si aún no se itemiza
+  total: number; // precio pagado — se sugiere desde los ítems, pero se puede editar a mano
   status: "pendiente" | "recibida";
   createdAt: string;
 }

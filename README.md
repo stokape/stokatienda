@@ -125,6 +125,24 @@ Configuración → Ganancia, o desde el margen actual del producto si ya tenía 
 se muestra un **precio de venta sugerido**; con la casilla marcada, al guardar el movimiento
 se actualiza tanto el costo como el precio de venta del producto.
 
+## Registro de compras (boletas)
+
+Desde `/admin/proveedores` → pestaña "Compras" → "Nueva compra" se lleva registro de dónde y
+cuánto se pagó, para ir comparando proveedores/lugares con el tiempo:
+
+- **Proveedor y lugar son ambos opcionales** — si compraste en un mercado o mayorista que no
+  tienes registrado como proveedor formal, solo escribe el lugar en texto libre.
+- **Foto de la boleta** (opcional, JPG/PNG/WEBP hasta 1.5 MB, se guarda como data URL) — se
+  puede tomar con la cámara del celular o subir una imagen ya tomada; se ve como miniatura en
+  la lista y se puede ampliar con un clic.
+- **Los productos son opcionales** — si no quieres itemizar en el momento, puedes registrar
+  solo el gasto total con su foto; el "Total pagado" es un campo aparte (no forzado a ser la
+  suma de los ítems, porque la boleta real puede traer impuestos o redondeos distintos) con un
+  botón "Usar suma" para copiar la suma de ítems si prefieres que coincidan.
+- Una compra **sin ítems** queda "Recibida" de inmediato (no hay stock que recibir). Una
+  compra **con ítems** queda "Pendiente" hasta que le des "Marcar recibida", momento en el que
+  sí se suma el stock y se crea el movimiento de inventario tipo "Entrada".
+
 ## Qué es administrable sin tocar código
 
 Desde `/admin` (rol Administrador, salvo que se indique otro) se puede editar en caliente:
