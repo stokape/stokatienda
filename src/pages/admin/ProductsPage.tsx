@@ -64,9 +64,17 @@ export function ProductsPage() {
   const [confirmDelete, setConfirmDelete] = useState<Product | null>(null);
 
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
     return products.filter((p) => {
       if (categoryFilter && p.category !== categoryFilter) return false;
-      if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (
+        q &&
+        !p.name.toLowerCase().includes(q) &&
+        !p.sku.toLowerCase().includes(q) &&
+        !p.barcode.toLowerCase().includes(q)
+      ) {
+        return false;
+      }
       return true;
     });
   }, [products, categoryFilter, search]);
@@ -194,7 +202,7 @@ export function ProductsPage() {
       <div className="mb-4 flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
-          <Input placeholder="Buscar producto…" className="pl-10" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <Input placeholder="Buscar por nombre, SKU o código de barras…" className="pl-10" value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
         <Select className="w-auto" value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value as CategorySlug | "")}>
           <option value="">Todas las categorías</option>
