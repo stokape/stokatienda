@@ -60,6 +60,9 @@ interface DataState {
   staffUsers: StaffUser[];
   cashSessions: CashSession[];
   suggestions: Suggestion[];
+  // Ids de los paquetes de categoría adicionales del buscador de códigos de
+  // barra que el admin activó desde Configuración (ver src/lib/barcodeLookup.ts).
+  activeBarcodeCategories: string[];
   config: StoreConfig;
 
   // Productos
@@ -124,6 +127,9 @@ interface DataState {
   updateSuggestionStatus: (id: string, status: Suggestion["status"]) => void;
   deleteSuggestion: (id: string) => void;
 
+  // Categorías del buscador de códigos de barra
+  setBarcodeCategoryActive: (id: string, active: boolean) => void;
+
   // Configuración
   updateConfig: (patch: Partial<StoreConfig>) => void;
 }
@@ -145,6 +151,7 @@ export const useDataStore = create<DataState>()(
       staffUsers: seedUsers,
       cashSessions: seedCashSessions,
       suggestions: seedSuggestions,
+      activeBarcodeCategories: [],
       config: defaultStoreConfig,
 
       addProduct: (p) =>
@@ -416,6 +423,13 @@ export const useDataStore = create<DataState>()(
         })),
       deleteSuggestion: (id) =>
         set((state) => ({ suggestions: state.suggestions.filter((s) => s.id !== id) })),
+
+      setBarcodeCategoryActive: (id, active) =>
+        set((state) => ({
+          activeBarcodeCategories: active
+            ? [...new Set([...state.activeBarcodeCategories, id])]
+            : state.activeBarcodeCategories.filter((c) => c !== id),
+        })),
 
       updateConfig: (patch) => set((state) => ({ config: { ...state.config, ...patch } })),
     }),

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "lacteos",
+    "label": "Lácteos y refrigerados",
+    "count": 65
+  },
+  {
+    "id": "panaderia",
+    "label": "Panadería",
+    "count": 21
+  },
+  {
+    "id": "snacks-salados",
+    "label": "Snacks salados (papas, chizitos, etc.)",
+    "count": 48
+  },
+  {
+    "id": "conservas",
+    "label": "Conservas y enlatados",
+    "count": 15
+  },
+  {
+    "id": "desayuno-cereales",
+    "label": "Desayuno y cereales",
+    "count": 23
+  },
+  {
+    "id": "salsas-condimentos",
+    "label": "Salsas, condimentos y untables",
+    "count": 70
+  },
+  {
+    "id": "cafe-te",
+    "label": "Café y té",
+    "count": 17
+  },
+  {
+    "id": "pastas",
+    "label": "Pastas y fideos",
+    "count": 13
+  }
+]

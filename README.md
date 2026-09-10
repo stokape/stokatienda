@@ -64,21 +64,27 @@ leer el código de barras de un producto físico:
 
 Cuando el código no existe en el catálogo (ya sea por cámara o escribiéndolo a mano en
 "Código de barras" dentro del alta de producto y dándole a **Buscar**), antes de dejarte
-completar todo a mano se intenta adelantar nombre y presentación en dos pasos:
+completar todo a mano se intenta adelantar nombre y presentación en varios pasos:
 
-1. **`public/data/barcode-seed-pe.json`** — ~1500 productos reales de marcas que se venden en
-   Perú (Gloria, Laive, Alicorp, Altomayo, Quaker, etc.), sacados una sola vez de Open Food
-   Facts filtrado por país. Se consulta primero, **sin necesidad de internet** una vez que el
-   navegador lo descargó (222 KB, se cachea en memoria durante la sesión) — el resultado dice
-   "Base local".
-2. Si no está ahí, se consulta [Open Food Facts](https://world.openfoodfacts.org) en vivo
-   (base colaborativa y gratuita, sin API key, se llama directo desde el navegador) — el
-   resultado dice "En línea". Esta base es mucho más grande, pero no es específica de Perú (para
-   productos peruanos hay bastante etiquetado con otro país, o simplemente no están) y necesita
-   internet en el momento.
+1. **`public/data/barcode-seed-pe.json`** — ~300 productos reales de **galletas, bebidas y
+   golosinas** que se venden en Perú (Costa, Arcor, Ambrosoli, Nabisco, Nestlé, aguas Cielo/San
+   Luis, etc.), sacados una sola vez de Open Food Facts filtrado por país y esas categorías. Se
+   consulta primero, **sin necesidad de internet** una vez que el navegador lo descargó (53 KB,
+   se cachea en memoria durante la sesión) — el resultado dice "Base local".
+2. **Paquetes de categoría adicionales**, en `/admin/configuracion` → "Categorías del buscador
+   de códigos de barra": lácteos, panadería, snacks salados, conservas, desayuno/cereales,
+   salsas/condimentos, café/té y pastas (13 a 70 productos cada uno, mismo origen y método). Se
+   activan con un clic — quedan disponibles al instante, también sin internet una vez
+   descargados. Se pueden agregar más paquetes así en el futuro sin tocar código: basta con
+   sumar un archivo en `public/data/barcode-categories/` y una entrada en su `manifest.json`.
+3. Si el código no está en ninguno de los locales activos, se consulta
+   [Open Food Facts](https://world.openfoodfacts.org) en vivo (base colaborativa y gratuita, sin
+   API key, se llama directo desde el navegador) — el resultado dice "En línea". Esta base es
+   mucho más grande, pero no es específica de Perú (para productos peruanos hay bastante
+   etiquetado con otro país, o simplemente no están) y necesita internet en el momento.
 
-Ninguna de las dos trae precio (eso es siempre propio de la tienda) ni cubre absolutamente todo
-— si no aparece en ningún lado, sigue el alta manual de siempre, sin ningún aviso de error.
+Ninguna trae precio (eso es siempre propio de la tienda) ni cubre absolutamente todo — si no
+aparece en ningún lado, sigue el alta manual de siempre, sin ningún aviso de error.
 
 ## Sugerencias de clientes
 

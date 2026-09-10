@@ -50,6 +50,7 @@ export function ProductsPage() {
   const products = useDataStore((s) => s.products);
   const brands = useDataStore((s) => s.brands);
   const categories = useDataStore((s) => s.categories);
+  const activeBarcodeCategories = useDataStore((s) => s.activeBarcodeCategories);
   const addProduct = useDataStore((s) => s.addProduct);
   const updateProduct = useDataStore((s) => s.updateProduct);
   const deleteProduct = useDataStore((s) => s.deleteProduct);
@@ -108,7 +109,7 @@ export function ProductsPage() {
   async function runBarcodeLookup(code: string) {
     const requestId = ++lookupRequestId.current;
     setLookupState("loading");
-    const result = await lookupBarcode(code);
+    const result = await lookupBarcode(code, activeBarcodeCategories);
     if (lookupRequestId.current !== requestId) return; // llegó tarde, ya no aplica
     if (result) {
       setLookupResult(result);

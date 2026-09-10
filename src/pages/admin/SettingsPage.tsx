@@ -1,8 +1,9 @@
-import { Plus, Save, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { Check, Loader2, Plus, Save, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../../components/ui/Button";
 import { Checkbox, Field, Input } from "../../components/ui/form";
+import { loadCategoryIndex, loadCategoryManifest, type CategoryPackInfo } from "../../lib/barcodeLookup";
 import { useDataStore } from "../../store/dataStore";
 import type { DeliveryZone, StoreConfig } from "../../types";
 
@@ -10,6 +11,35 @@ export function SettingsPage() {
   const config = useDataStore((s) => s.config);
   const updateConfig = useDataStore((s) => s.updateConfig);
   const [form, setForm] = useState<StoreConfig>(config);
+
+  const activeBarcodeCategories = useDataStore((s) => s.activeBarcodeCategories);
+  const setBarcodeCategoryActive = useDataStore((s) => s.setBarcodeCategoryActive);
+  const [categoryPacks, setCategoryPacks] = useState<CategoryPackInfo[]>([]);
+  const [togglingId, setTogglingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadCategoryManifest().then(setCategoryPacks);
+  }, []);
+
+  async function handleToggleCategory(pack: CategoryPackInfo) {
+    const isActive = activeBarcodeCategories.includes(pack.id);
+    if (isActive) {
+      setBarcodeCategoryActive(pack.id, false);
+      return;
+    }
+    setTogglingId(pack.id);
+    try {
+      const index = await loadCategoryIndex(pack.id);
+      if (index.size === 0) {
+        toast.error("No se pudo cargar esta categoría.", { description: "Revisa tu conexión e intenta de nuevo." });
+        return;
+      }
+      setBarcodeCategoryActive(pack.id, true);
+      toast.success(`${pack.label} agregada`, { description: `${index.size} productos disponibles sin internet.` });
+    } finally {
+      setTogglingId(null);
+    }
+  }
 
   function updateZone(id: string, patch: Partial<DeliveryZone>) {
     setForm((f) => ({ ...f, deliveryZones: f.deliveryZones.map((z) => (z.id === id ? { ...z, ...patch } : z)) }));
@@ -79,6 +109,48 @@ export function SettingsPage() {
             <Input id="default-margin" type="number" min={0} step={1} value={form.defaultMargin} onChange={(e) => setForm({ ...form, defaultMargin: Number(e.target.value) })} />
           </Field>
         </div>
+      </section>
+
+      <section className="rounded-xl border border-stoka-border bg-stoka-surface p-5">
+        <h2 className="mb-1 font-semibold text-stoka-green-900">Categorías del buscador de códigos de barra</h2>
+        <p className="mb-4 text-sm text-stoka-ink-muted">
+          Ya tienes cargado, sin necesidad de internet, galletas, bebidas y golosinas. Agrega otras categorías con
+          un clic — quedan disponibles al instante para adelantar nombre y presentación al dar de alta un producto
+          nuevo en Productos.
+        </p>
+        {categoryPacks.length === 0 ? (
+          <p className="text-sm text-stoka-ink-muted">Cargando categorías disponibles…</p>
+        ) : (
+          <div className="grid gap-2 sm:grid-cols-2">
+            {categoryPacks.map((pack) => {
+              const active = activeBarcodeCategories.includes(pack.id);
+              return (
+                <div key={pack.id} className="flex items-center justify-between gap-3 rounded-lg border border-stoka-border p-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-stoka-ink">{pack.label}</p>
+                    <p className="text-xs text-stoka-ink-muted">{pack.count} productos</p>
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={active ? "outline" : "primary"}
+                    disabled={togglingId === pack.id}
+                    icon={
+                      togglingId === pack.id ? (
+                        <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+                      ) : active ? (
+                        <Check className="size-3.5 text-stoka-success" aria-hidden="true" />
+                      ) : undefined
+                    }
+                    onClick={() => handleToggleCategory(pack)}
+                  >
+                    {active ? "Quitar" : "Agregar"}
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {form.deliveryEnabled && (
